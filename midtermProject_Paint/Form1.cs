@@ -85,6 +85,8 @@ namespace midtermProject_Paint
         private void polygonBtn_Click(object sender, EventArgs e)
         {
             graphicType = GraphicType.Polygon;
+            isPolygon = false;
+
         }
 
         private void mainPanel_Paint(object sender, PaintEventArgs e)
@@ -189,7 +191,7 @@ namespace midtermProject_Paint
                     isMouseDown = false;
                     break;
                 case GraphicType.Polygon:
-                    if(graphicType == GraphicType.Polygon)
+                    if(graphicType == GraphicType.Polygon && !isPolygon)
                     {
                         MPolygon polygon = new MPolygon
                         {
@@ -210,10 +212,20 @@ namespace midtermProject_Paint
                         MPolygon polygon = shapeList[shapeList.Count - 1] as MPolygon;
                         polygon.points[polygon.points.Count - 1] = e.Location;
                         polygon.points.Add(e.Location);
+                        Console.WriteLine(polygon);
+                        Console.WriteLine(polygon.points);
                     }
                     isMouseDown = false;
+                    mainPanel.Invalidate();
                     break;
+                    default:
+                    break;
+                 
+                    
             }
+
+            Console.WriteLine(shapeList.Count);
+   
         }
 
         private void mainPanel_MouseMove(object sender, MouseEventArgs e)
@@ -232,14 +244,13 @@ namespace midtermProject_Paint
                 shapeList[shapeList.Count - 1].endPoint = e.Location;
                 this.mainPanel.Refresh();
             }
-            if (graphicType == GraphicType.Polygon)
+            if (graphicType == GraphicType.Polygon && isPolygon == true)
             {
-                if (shapeList.Count > 0)
-                {
+          
                     MPolygon polygon = shapeList[shapeList.Count - 1] as MPolygon;
                     polygon.points[polygon.points.Count - 1] = e.Location;
                     this.mainPanel.Refresh();
-                }
+                
             }
             else if (graphicType == GraphicType.Arc)
             {
@@ -256,7 +267,11 @@ namespace midtermProject_Paint
         private void mainPanel_MouseUp(object sender, MouseEventArgs e)
         {
             //DrawGraphic.onClickMouseUp(e.Location);
-             isMouseDown = false;
+             
+            if(graphicType != GraphicType.Polygon)
+            {
+                isMouseDown = false;
+            }
         }
 
         private void colordiaBtn_Click(object sender, EventArgs e)

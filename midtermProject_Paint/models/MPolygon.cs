@@ -11,29 +11,31 @@ namespace midtermProject_Paint.models
 {
     public class MPolygon : Shape
     {
-        public List<Point> points;
+        public List<Point> points { get; set; } = new List<Point>();
 
         public MPolygon()
         {
             name = "Polygon";
-            points = new List<Point>();
         }
 
         public MPolygon(Color color)
         {
             name = "Polygon";
             this.color = color;
-            points = new List<Point>();
         }
 
         public override void drawShape(Graphics graphic)
         {
            
-                if (!isFill)
+            using(GraphicsPath path = this.graphicsPath)
+            {
+                if (!this.isFill)
                 {
                     using (Pen myPen = new Pen(color, width))
                     {
-                        graphic.DrawPolygon(myPen, points.ToArray());
+                        if (isDash) myPen.DashStyle = DashStyle.Dash;
+                        graphic.DrawPath(myPen, path);
+                
                     }
                 }
                 else
@@ -44,15 +46,16 @@ namespace midtermProject_Paint.models
                         {
                             using (Pen myPen = new Pen(color, width))
                             {
-                                graphic.DrawPolygon(myPen, points.ToArray());
+                                graphic.DrawPath(myPen, path);
                             }
                         }
                         else
                         {
-                            graphic.FillPolygon(myBrush, points.ToArray());
+                            graphic.FillPath(myBrush, path);
                         }
                     }
                 }
+            }
             
         }
 
@@ -66,7 +69,7 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-               /* if (points.Count < 3)
+                if (points.Count < 3)
                 {
                     path.AddLine(points[0], points[1]);
                 }
@@ -74,7 +77,7 @@ namespace midtermProject_Paint.models
                 {
 
                     path.AddPolygon(points.ToArray());
-                }*/
+                }
 
                 return path;
             }
