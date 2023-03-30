@@ -102,7 +102,7 @@
             this.btnWidth.Size = new System.Drawing.Size(150, 27);
             this.btnWidth.TabIndex = 12;
             this.btnWidth.Value = new decimal(new int[] {
-            5,
+            3,
             0,
             0,
             0});
@@ -292,6 +292,7 @@
             this.selectBtn.Size = new System.Drawing.Size(62, 52);
             this.selectBtn.TabIndex = 3;
             this.selectBtn.UseVisualStyleBackColor = false;
+            this.selectBtn.Click += new System.EventHandler(this.selectBtn_Click);
             // 
             // eraseBtn
             // 
@@ -303,6 +304,7 @@
             this.eraseBtn.Size = new System.Drawing.Size(62, 52);
             this.eraseBtn.TabIndex = 2;
             this.eraseBtn.UseVisualStyleBackColor = false;
+            this.eraseBtn.Click += new System.EventHandler(this.eraseBtn_Click);
             // 
             // unGroupBtn
             // 
@@ -314,6 +316,7 @@
             this.unGroupBtn.Size = new System.Drawing.Size(62, 52);
             this.unGroupBtn.TabIndex = 1;
             this.unGroupBtn.UseVisualStyleBackColor = false;
+            this.unGroupBtn.Click += new System.EventHandler(this.unGroupBtn_Click);
             // 
             // groupBtn
             // 
@@ -325,6 +328,7 @@
             this.groupBtn.Size = new System.Drawing.Size(62, 52);
             this.groupBtn.TabIndex = 0;
             this.groupBtn.UseVisualStyleBackColor = false;
+            this.groupBtn.Click += new System.EventHandler(this.groupBtn_Click);
             // 
             // mainPanel
             // 
@@ -336,6 +340,7 @@
             this.mainPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseDown);
             this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
             this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseUp);
+            this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseClick);
             // 
             // Form1
             // 

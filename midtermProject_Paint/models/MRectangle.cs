@@ -48,7 +48,29 @@ namespace midtermProject_Paint.models
         }
         public override bool isSelect(Point point)
         {
-            throw new NotImplementedException();
+            bool inside = false;
+            using (GraphicsPath path = graphicsPath)
+            {
+                if (isFill)
+                {
+                    inside = path.IsVisible(point);
+                }
+                else
+                {
+                    using (Pen pen = new Pen(color, width + 2))
+                    {
+                        inside = path.IsOutlineVisible(point, pen);
+                    }
+                }
+            }
+
+            return inside;
+        }
+
+        public override void moveShape(Point distance)
+        {
+            startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
+            endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
         }
 
         protected override GraphicsPath graphicsPath
@@ -56,7 +78,11 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                
+                Rectangle rectangle = new Rectangle(Math.Min(startPoint.X, endPoint.X),
+                            Math.Min(startPoint.Y, endPoint.Y),
+                            Math.Abs(endPoint.X - startPoint.X),
+                            Math.Abs(endPoint.Y - startPoint.Y));
+                path.AddRectangle(rectangle);
                 return path;
             }
         }

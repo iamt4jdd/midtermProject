@@ -48,12 +48,17 @@ namespace midtermProject_Paint.models
             
         }
 
+        public override void moveShape(Point distance)
+        {
+            startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
+            endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
+        }
         protected override GraphicsPath graphicsPath
         {
             get
             {
                 GraphicsPath path = new GraphicsPath();
-
+                path.AddEllipse(new RectangleF(startPoint.X, startPoint.Y, endPoint.X - startPoint.X, endPoint.Y - startPoint.Y));
                 return path;
             }
         }

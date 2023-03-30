@@ -19,6 +19,10 @@ namespace midtermProject_Paint.models
 
         public Point endPoint { get; set; }
 
+        public Point previousLocation { get; set; }
+
+        public bool isSelected { get; set; }
+
         public bool isFill { get; set; }
 
         public bool isDash { get; set; }
@@ -30,6 +34,9 @@ namespace midtermProject_Paint.models
         public abstract void drawShape(Graphics graphic);
 
         public abstract bool isSelect(Point point);
+
+        public abstract void moveShape(Point distance);
+
         protected abstract GraphicsPath graphicsPath { get; }
         
 

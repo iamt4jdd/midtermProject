@@ -13,6 +13,8 @@ namespace midtermProject_Paint.utilities
         Ellipse,
         Circle,
         Arc,
-        Polygon
+        Polygon,
+        Group,
+        Select
     }
 }

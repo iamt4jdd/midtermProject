@@ -33,18 +33,31 @@ namespace midtermProject_Paint.models
 
         public override bool isSelect(Point point)
         {
-            bool result = false;
+            bool inside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                using(Pen myPen = new Pen(color, width + 2))
+                if (isFill)
                 {
-                    result = path.IsOutlineVisible(point, myPen);
+                    inside = path.IsVisible(point);
+                }
+                else
+                {
+                    using (Pen pen = new Pen(color, width + 3))
+                    {
+                        inside = path.IsOutlineVisible(point, pen);
+                    }
                 }
             }
-            return result;
+
+            return inside;
         }
 
-     
+        public override void moveShape(Point distance)
+        {
+            startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
+            endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
+        }
+
         protected override GraphicsPath graphicsPath
         {
             get
