@@ -58,7 +58,7 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                path.AddEllipse(new RectangleF(startPoint.X, startPoint.Y, endPoint.X - startPoint.X, endPoint.Y - startPoint.Y));
+                path.AddEllipse(new Rectangle(startPoint.X, startPoint.Y, endPoint.X - startPoint.X, endPoint.Y - startPoint.Y));
                 return path;
             }
         }

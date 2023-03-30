@@ -28,9 +28,15 @@ namespace midtermProject_Paint
         int width;
         bool isMouseDown;
         bool isFill, isDash, isPolygon, isCurve, isMoving = false;
-        Shape selectedShape, deletedShape;
+        Shape selectedShape, deleteShape;
         Point previousPoint;
-        
+
+        Brush MovingBrush = new SolidBrush(Color.FromArgb(61, 165, 129));
+        Pen MovingFrame = new Pen(Color.FromArgb(0, 30, 81), 1.5f)
+        {
+            DashPattern = new float[] { 3, 3, 3, 3 },
+        };
+      
 
         public Form1()
         {
@@ -45,7 +51,7 @@ namespace midtermProject_Paint
             mainPanel.SetDoubleBuffered();
             //graphic = this.mainPanel.CreateGraphics();
             color = Color.Black;
-            width = 5;
+            width = 3;
             myPen = new Pen(color, width);
         }
 
@@ -59,12 +65,42 @@ namespace midtermProject_Paint
         {
             // DrawGraphic.getDrawing(graphic, myPen);
            
-                shapeList.ForEach((shape) =>
+            shapeList.ForEach((shape) =>
+            {
+                if (isMoving)
                 {
                     shape.drawShape(e.Graphics);
-                });
-            
-            
+                    if (!(selectedShape is MLine))
+                    {
+                        SelectFrame.DrawSelectFrame(e.Graphics, MovingFrame,
+                            new Rectangle(selectedShape.startPoint.X,
+                            selectedShape.startPoint.Y,
+                            selectedShape.endPoint.X - selectedShape.startPoint.X,
+                            selectedShape.endPoint.Y - selectedShape.startPoint.Y));
+                    }
+                    if (selectedShape is MPolygon polygon)
+                    {
+                        SelectFrame.DrawSelectPointsPolygon(e.Graphics, MovingBrush, polygon.points) ;
+                    }
+                    else if(selectedShape is MLine)
+                    {   
+                        SelectFrame.DrawSelectPointsLine(e.Graphics, MovingBrush,
+                                                     selectedShape.startPoint,
+                                                     selectedShape.endPoint);
+                    }
+                    else
+                    {
+                        SelectFrame.DrawSelectPoints(e.Graphics, MovingBrush,
+                                                     selectedShape.startPoint,
+                                                     selectedShape.endPoint);
+                    }
+                    
+                }
+                else shape.drawShape(e.Graphics);
+            });
+
+
+
         }
 
         private void mainPanel_MouseDown(object sender, MouseEventArgs e)
@@ -86,22 +122,57 @@ namespace midtermProject_Paint
             }
 
 
-          
-                isMouseDown = true;
-                switch (graphicType)
-                {
-                    case GraphicType.Line:
-                        addShape(new MLine
-                        {
-                            startPoint = e.Location,
-                            endPoint = e.Location,
-                            width = width,
-                            color = color,
-                            isDash = isDash
-                        });
-                        break;
-                    case GraphicType.Rectangle:
-                        addShape(new MRectangle
+
+            isMouseDown = true;
+            switch (graphicType)
+            {
+                case GraphicType.Line:
+                    addShape(new MLine
+                    {
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isDash = isDash
+                    });
+                    break;
+                case GraphicType.Rectangle:
+                    addShape(new MRectangle
+                    {
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isFill = isFill,
+                        isDash = isDash
+                    });
+                    break;
+                case GraphicType.Ellipse:
+                    addShape(new MEllipse
+                    {
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isFill = isFill,
+                        isDash = isDash
+                    });
+                    break;
+                case GraphicType.Circle:
+                    addShape(new MCircle
+                    {
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isFill = isFill,
+                        isDash = isDash
+                    });
+                    break;
+                case GraphicType.Arc:
+                    if (graphicType == GraphicType.Arc)
+                    {
+                        MArc arc = new MArc
                         {
                             startPoint = e.Location,
                             endPoint = e.Location,
@@ -109,10 +180,24 @@ namespace midtermProject_Paint
                             color = color,
                             isFill = isFill,
                             isDash = isDash
-                        });
-                        break;
-                    case GraphicType.Ellipse:
-                        addShape(new MEllipse
+                        };
+                        arc.points.Add(e.Location);
+                        arc.points.Add(e.Location);
+                        addShape(arc);
+                        isCurve = true;
+                    }
+                    else
+                    {
+                        MArc arc = shapeList[shapeList.Count - 1] as MArc;
+                        arc.points[arc.points.Count - 1] = e.Location;
+                        arc.points.Add(e.Location);
+                    }
+                    isMouseDown = false;
+                    break;
+                case GraphicType.Polygon:
+                    if (graphicType == GraphicType.Polygon && !isPolygon)
+                    {
+                        MPolygon polygon = new MPolygon
                         {
                             startPoint = e.Location,
                             endPoint = e.Location,
@@ -120,81 +205,32 @@ namespace midtermProject_Paint
                             color = color,
                             isFill = isFill,
                             isDash = isDash
-                        });
-                        break;
-                    case GraphicType.Circle:
-                        addShape(new MCircle
-                        {
-                            startPoint = e.Location,
-                            endPoint = e.Location,
-                            width = width,
-                            color = color,
-                            isFill = isFill,
-                            isDash = isDash
-                        });
-                        break;
-                    case GraphicType.Arc:
-                        if (graphicType == GraphicType.Arc)
-                        {
-                            MArc arc = new MArc
-                            {
-                                startPoint = e.Location,
-                                endPoint = e.Location,
-                                width = width,
-                                color = color,
-                                isFill = isFill,
-                                isDash = isDash
-                            };
-                            arc.points.Add(e.Location);
-                            arc.points.Add(e.Location);
-                            addShape(arc);
-                            isCurve = true;
-                        }
-                        else
-                        {
-                            MArc arc = shapeList[shapeList.Count - 1] as MArc;
-                            arc.points[arc.points.Count - 1] = e.Location;
-                            arc.points.Add(e.Location);
-                        }
-                        isMouseDown = false;
-                        break;
-                    case GraphicType.Polygon:
-                        if (graphicType == GraphicType.Polygon && !isPolygon)
-                        {
-                            MPolygon polygon = new MPolygon
-                            {
-                                startPoint = e.Location,
-                                endPoint = e.Location,
-                                width = width,
-                                color = color,
-                                isFill = isFill,
-                                isDash = isDash
-                            };
-                            polygon.points.Add(e.Location);
-                            polygon.points.Add(e.Location);
-                            addShape(polygon);
-                            isPolygon = true;
-                        }
-                        else
-                        {
-                            MPolygon polygon = shapeList[shapeList.Count - 1] as MPolygon;
-                            polygon.points[polygon.points.Count - 1] = e.Location;
-                            polygon.points.Add(e.Location);
-                            Console.WriteLine(polygon);
-                            Console.WriteLine(polygon.points);
-                        }
-                        isMouseDown = false;
-                        mainPanel.Invalidate();
-                        break;
-                    default:
-                        break;
+                        };
+                        polygon.points.Add(e.Location);
+                        polygon.points.Add(e.Location);
+                        addShape(polygon);
+                        isPolygon = true;
+                    }
+                    else
+                    {
+                        MPolygon polygon = shapeList[shapeList.Count - 1] as MPolygon;
+                        polygon.points[polygon.points.Count - 1] = e.Location;
+                        polygon.points.Add(e.Location);
+                        Console.WriteLine(polygon);
+                        Console.WriteLine(polygon.points);
+                    }
+                    isMouseDown = false;
+                    mainPanel.Invalidate();
+                    break;
+                default:
+                    break;
 
 
-                }
-            
+            }
 
-            
-   
+
+
+
         }
 
         private void mainPanel_MouseMove(object sender, MouseEventArgs e)
@@ -206,15 +242,15 @@ namespace midtermProject_Paint
                     var distance = new Point(e.X - previousPoint.X, e.Y - previousPoint.Y);
                     selectedShape.moveShape(distance);
                     previousPoint = e.Location;
-                    mainPanel.Invalidate(); 
-
+                    mainPanel.Invalidate();
+                 
                     
                 }
             }
-            base.OnMouseMove(e);
-            if (!isMouseDown) return;
+           
+            //if (!isMouseDown) return;
             //DrawGraphic.onClickMouseMove(e.Location);
-            if (isMouseDown && !isMoving)
+            if (isMouseDown && !isMoving && graphicType != GraphicType.Select)
             {
                 shapeList[shapeList.Count - 1].endPoint = e.Location;
                 this.mainPanel.Refresh();
@@ -245,11 +281,11 @@ namespace midtermProject_Paint
 
             if (isMoving)
             {
-                deletedShape = selectedShape;
+                deleteShape = selectedShape;
                 selectedShape = null;
                 isMoving = false;
             }
-            base.OnMouseUp(e);
+           
             if (graphicType != GraphicType.Polygon)
                 isMouseDown = false;
                 
@@ -363,8 +399,12 @@ namespace midtermProject_Paint
 
         private void eraseBtn_Click(object sender, EventArgs e)
         {
-            shapeList.Clear();
-            mainPanel.Invalidate();
+            shapeList.Remove(deleteShape);
+            foreach(var shape in selectedShapeList)
+            {
+                shapeList.Remove(shape);
+            }
+            this.mainPanel.Invalidate();
         }
 
         private void selectBtn_Click(object sender, EventArgs e)
@@ -377,6 +417,11 @@ namespace midtermProject_Paint
         private void addShape(Shape shape)
         {
             shapeList.Add(shape);
+        }
+        
+        private void setCursor(Cursor cursor)
+        {
+            mainPanel.Cursor = Cursor;
         }
     }
 }

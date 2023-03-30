@@ -70,7 +70,8 @@ namespace midtermProject_Paint.models
 
         public override void moveShape(Point distance)
         {
-            throw new NotImplementedException();
+            startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
+            endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
         }
 
         protected override GraphicsPath graphicsPath
@@ -79,7 +80,7 @@ namespace midtermProject_Paint.models
             {
                 GraphicsPath path = new GraphicsPath();
                 int Diameter = ((endPoint.X - startPoint.X) + (endPoint.Y - startPoint.Y)) / 2;
-                path.AddEllipse(new RectangleF(startPoint.X, startPoint.Y, Diameter, Diameter));
+                path.AddEllipse(new Rectangle(startPoint.X, startPoint.Y, Diameter, Diameter));
                 endPoint = new Point(startPoint.X + Diameter, startPoint.Y + Diameter);
                 return path;
             }
