@@ -27,7 +27,7 @@ namespace midtermProject_Paint
         Color color;
         int width;
         bool isMouseDown;
-        bool isFill, isDash, isPolygon, isCurve, isMoving = false;
+        bool isFill, isDash, isPolygon, isMoving = false, isCtrlPressed = false;
         Shape selectedShape, deleteShape;
         Point previousPoint;
 
@@ -68,8 +68,8 @@ namespace midtermProject_Paint
            
             
             shapeList.ForEach((shape) =>
-            {
-                if (isMoving)
+            {   
+                if (selectedShape != null || isMoving)
                 {
                     shape.drawShape(e.Graphics);
                     selectedShapeList.ForEach((selectedShape) =>
@@ -85,15 +85,20 @@ namespace midtermProject_Paint
                                                          selectedShape.startPoint,
                                                          selectedShape.endPoint);
                         }
-                        else
+                        else if (selectedShape is MArc)
+                        {
+                            SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
+                                                         selectedShape.startPoint,
+                                                         selectedShape.endPoint);
+                        }
+                        else 
                         {
                             SelectFrame.DrawSelectPoints(e.Graphics, MovingBrush,
                                                          selectedShape.startPoint,
                                                          selectedShape.endPoint);
                         }
-                        if (!(selectedShape is MLine))
-                        {
-                       
+                        if (!(selectedShape is MLine) && !(selectedShape is MArc))
+                        {                    
                             if (selectedShape.startPoint.X < selectedShape.endPoint.X 
                             && selectedShape.startPoint.Y < selectedShape.endPoint.Y)
                             {
@@ -143,34 +148,23 @@ namespace midtermProject_Paint
 
         private void mainPanel_MouseDown(object sender, MouseEventArgs e)
         {
-         
-
-            //if(graphicType == GraphicType.Select)
-            //{
-            //    for(var i = shapeList.Count - 1; i >= 0; i--)
-            //    {
-            //        if (shapeList[i].isSelect(e.Location))
-            //        {
-            //            selectedShape = shapeList[i];
-            //            previousPoint = e.Location;
-            //            isMoving = true;
-            //            break;
-            //        }
-            //    }
-            //}
-            // Check if Ctrl key is pressed
-            if(graphicType == GraphicType.Select)
+            if (Control.ModifierKeys == Keys.Control)
             {
-                if (Control.ModifierKeys == Keys.Control)
+                isCtrlPressed = true;
+            }
+
+            if (graphicType == GraphicType.Select)
+            {
+                if (isCtrlPressed)
                 {
-                    // Check if the clicked shape is not already in the selectedShapeList
+                   
                     if (selectedShape == null || !selectedShapeList.Contains(selectedShape))
-                    {
+                    {   
                         for (int i = shapeList.Count - 1; i >= 0; i--)
                         {
                             if (shapeList[i].isSelect(e.Location))
                             {
-                                // Add the clicked shape to the selectedShapeList
+                                
                                 selectedShapeList.Add(shapeList[i]);
                                 selectedShape = shapeList[i];
                                 previousPoint = e.Location;
@@ -178,18 +172,19 @@ namespace midtermProject_Paint
                                 break;
                             }
                         }
+                       
                     }
+                    
                     else
                     {
-                        // If the clicked shape is already in the selectedShapeList, remove it from the list
+                       
                         selectedShapeList.Remove(selectedShape);
                         selectedShape = null;
                         isMoving = false;
                     }
                 }
-                else // Ctrl key is not pressed
+                else 
                 {
-                    // Deselect all shapes except the clicked one
                     for (int i = 0; i < shapeList.Count; i++)
                     {
                         if (shapeList[i].isSelect(e.Location))
@@ -213,6 +208,7 @@ namespace midtermProject_Paint
 
             Console.WriteLine(selectedShape);
             Console.WriteLine(selectedShapeList.Count());
+    
             isMouseDown = true;
             switch (graphicType)
             {
@@ -260,29 +256,15 @@ namespace midtermProject_Paint
                     });
                     break;
                 case GraphicType.Arc:
-                    if (graphicType == GraphicType.Arc)
+                    addShape(new MArc
                     {
-                        MArc arc = new MArc
-                        {
-                            startPoint = e.Location,
-                            endPoint = e.Location,
-                            width = width,
-                            color = color,
-                            isFill = isFill,
-                            isDash = isDash
-                        };
-                        arc.points.Add(e.Location);
-                        arc.points.Add(e.Location);
-                        addShape(arc);
-                        isCurve = true;
-                    }
-                    else
-                    {
-                        MArc arc = shapeList[shapeList.Count - 1] as MArc;
-                        arc.points[arc.points.Count - 1] = e.Location;
-                        arc.points.Add(e.Location);
-                    }
-                    isMouseDown = false;
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isFill = isFill,
+                        isDash = isDash
+                    });
                     break;
                 case GraphicType.Polygon:
                     if (graphicType == GraphicType.Polygon && !isPolygon)
@@ -347,8 +329,7 @@ namespace midtermProject_Paint
                 }
             }
            
-            //if (!isMouseDown) return;
-            //DrawGraphic.onClickMouseMove(e.Location);
+        
             if (isMouseDown && !isMoving && graphicType != GraphicType.Select)
             {
                 shapeList[shapeList.Count - 1].endPoint = e.Location;
@@ -362,21 +343,17 @@ namespace midtermProject_Paint
                     this.mainPanel.Refresh();
                 
             }
-            else if (graphicType == GraphicType.Arc & isCurve)
-            {
-                if (shapeList.Count > 0)
-                {
-                    MArc arc = shapeList[shapeList.Count - 1] as MArc;
-                    arc.points[arc.points.Count - 1] = e.Location;
-                    this.mainPanel.Refresh();
-                }
-            }
+           
         }
        
             
         private void mainPanel_MouseUp(object sender, MouseEventArgs e)
         {
-            //DrawGraphic.onClickMouseUp(e.Location);
+        
+            if (Control.ModifierKeys == Keys.Control)
+            {
+                isCtrlPressed = false;
+            }
 
             if (isMoving)
             {
@@ -402,20 +379,14 @@ namespace midtermProject_Paint
                     this.mainPanel.Refresh();
 
                 }
-                else if (graphicType == GraphicType.Arc)
-                {
-                    MArc arc = shapeList[shapeList.Count - 1] as MArc;
-                    arc.points.Remove(arc.points[arc.points.Count - 1]);
-                    isCurve = false;
-                    this.mainPanel.Refresh();
-                }
+               
             }
 
-            if (Control.ModifierKeys == Keys.Control)
+            if (e.Button == MouseButtons.Left)
             {
-                if (e.Button == MouseButtons.Left)
+                if (isCtrlPressed)
                 {
-                    // Check if the clicked shape is already selected
+                    
                     bool alreadySelected = false;
                     foreach (Shape shape in selectedShapeList)
                     {
@@ -425,8 +396,8 @@ namespace midtermProject_Paint
                             break;
                         }
                     }
-
-                    // If the clicked shape is not already selected, add it to the selection list
+                   
+                  
                     if (!alreadySelected)
                     {
                         for (int i = shapeList.Count - 1; i >= 0; i--)
@@ -438,7 +409,7 @@ namespace midtermProject_Paint
                             }
                         }
                     }
-                    else // If the clicked shape is already selected, remove it from the selection list
+                    else 
                     {
                         for (int i = selectedShapeList.Count - 1; i >= 0; i--)
                         {
@@ -450,7 +421,6 @@ namespace midtermProject_Paint
                         }
                     }
 
-                    // Redraw the panel to show the selection
                     mainPanel.Invalidate();
                 }
             }
@@ -477,39 +447,33 @@ namespace midtermProject_Paint
         //Select Drawing object and Drawing mode
         private void lineBtn_Click(object sender, EventArgs e)
         {
-            // DrawGraphic.onClickDrawLine();
             graphicType = GraphicType.Line;
         }
 
         private void ellipseBtn_Click(object sender, EventArgs e)
-        {
-            // DrawGraphic.onClickDrawEllipse();
+        {    
             graphicType = GraphicType.Ellipse;
         }
 
         private void rectangleBtn_Click(object sender, EventArgs e)
         {
-            // DrawGraphic.onClickDrawRectangle();
             graphicType = GraphicType.Rectangle;
         }
 
         private void circleBtn_Click(object sender, EventArgs e)
         {
-            //DrawGraphic.onClickDrawCircle();
             graphicType = GraphicType.Circle;
         }
 
         private void arcBtn_Click(object sender, EventArgs e)
         {
             graphicType = GraphicType.Arc;
-            isCurve = false;
         }
 
         private void polygonBtn_Click(object sender, EventArgs e)
         {
             graphicType = GraphicType.Polygon;
             isPolygon = false;
-
         }
 
         private void brushBtn_Click(object sender, EventArgs e)
@@ -547,6 +511,7 @@ namespace midtermProject_Paint
             {
                 shapeList.Remove(shape);
             }
+            selectedShapeList.Clear();
             this.mainPanel.Invalidate();
         }
 

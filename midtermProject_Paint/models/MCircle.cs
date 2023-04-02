@@ -11,6 +11,8 @@ namespace midtermProject_Paint.models
 {
     public class MCircle : Shape
     {
+
+       
         public MCircle()
         {
             name = "Circle";
@@ -29,20 +31,22 @@ namespace midtermProject_Paint.models
                 using (Pen myPen = new Pen(color, width))
                 {
                     if (isDash) myPen.DashStyle = DashStyle.Dash;
-                    graphic.DrawEllipse(myPen, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
+                    int diameter = (int)Math.Sqrt(Math.Pow(this.endPoint.X - this.startPoint.X, 2) + Math.Pow(this.endPoint.Y - this.startPoint.Y, 2));
+                    int radius = diameter / 2;
+                    int centerX = Math.Min(this.startPoint.X, this.endPoint.X) + radius;
+                    int centerY = Math.Min(this.startPoint.Y, this.endPoint.Y) + radius;
+                    graphic.DrawEllipse(myPen, centerX - radius, centerY - radius, diameter, diameter);
                 }
             }
             else
             {
                 using (Brush myBrush = new SolidBrush(color))
                 {
-                    graphic.FillEllipse(myBrush, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
+                    int diameter = (int)Math.Sqrt(Math.Pow(this.endPoint.X - this.startPoint.X, 2) + Math.Pow(this.endPoint.Y - this.startPoint.Y, 2));
+                    int radius = diameter / 2;
+                    int centerX = Math.Min(this.startPoint.X, this.endPoint.X) + radius;
+                    int centerY = Math.Min(this.startPoint.Y, this.endPoint.Y) + radius;
+                    graphic.FillEllipse(myBrush, centerX - radius, centerY - radius, diameter, diameter);
                 }
             }
         }
@@ -71,9 +75,7 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                int Diameter = ((endPoint.X - startPoint.X) + (endPoint.Y - startPoint.Y)) / 2;
-                path.AddEllipse(new Rectangle(startPoint.X, startPoint.Y, Diameter, Diameter));
-                endPoint = new Point(startPoint.X + Diameter, startPoint.Y + Diameter);
+         
                 return path;
             }
         }

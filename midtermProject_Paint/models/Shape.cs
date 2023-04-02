@@ -24,6 +24,7 @@ namespace midtermProject_Paint.models
         public bool isSelected { get; set; }
 
         public bool isInside { get; set; }
+
         public bool isFill { get; set; }
 
         public bool isDash { get; set; }

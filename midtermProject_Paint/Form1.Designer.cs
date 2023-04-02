@@ -341,7 +341,7 @@
             this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
             this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseUp);
             this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseClick);
-        
+
             // 
             // Form1
             // 
@@ -350,8 +350,9 @@
             this.ClientSize = new System.Drawing.Size(1319, 955);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.toolPanel);
+            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Paint";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.toolPanel.ResumeLayout(false);
             this.toolPanel.PerformLayout();

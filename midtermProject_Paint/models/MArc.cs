@@ -11,40 +11,78 @@ namespace midtermProject_Paint.models
 {
     public class MArc : Shape
     {
-        public List<Point> points;
+      
 
         public MArc()
         {
             name = "Arc";
-            points = new List<Point>();
+          
         }
 
         public MArc(Color color)
         {
             name = "Arc";
             this.color = color;
-            points = new List<Point>();
         }
 
         public override void drawShape(Graphics graphic)
         {
-            using (GraphicsPath path = graphicsPath)
+            int startAngle = 0;
+            int sweepAngle = -180;
+            using (Pen myPen = new Pen(color, width))
             {
-                using (Pen pen = new Pen(color, width))
+                if (startPoint.Y > endPoint.Y) // If startPoint is below endPoint
                 {
-                    graphic.DrawPath(pen, path);
+                    startAngle = 0;
+                    sweepAngle = 180;
+                }
+                if (Math.Abs(endPoint.Y - startPoint.Y) == 0 && Math.Abs(endPoint.X - startPoint.X) == 0)
+                {
+                    Rectangle rect = new Rectangle(
+                     Math.Min(startPoint.X, endPoint.X),
+                     Math.Min(startPoint.Y, endPoint.Y),
+                     Math.Abs(endPoint.X - startPoint.X + 10),
+                     Math.Abs(endPoint.Y - startPoint.Y + 10));
+                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
+                }
+                else if (Math.Abs(endPoint.Y - startPoint.Y) == 0)
+                {
+                    Rectangle rect = new Rectangle(
+                     Math.Min(startPoint.X, endPoint.X),
+                     Math.Min(startPoint.Y, endPoint.Y),
+                     Math.Abs(endPoint.X - startPoint.X),
+                     Math.Abs(endPoint.Y - startPoint.Y + 10));
+                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
+                }
+                else if (Math.Abs(endPoint.X - startPoint.X) == 0)
+                {
+                    Rectangle rect = new Rectangle(
+                    Math.Min(startPoint.X, endPoint.X),
+                    Math.Min(startPoint.Y, endPoint.Y),
+                    Math.Abs(endPoint.X - startPoint.X + 10),
+                    Math.Abs(endPoint.Y - startPoint.Y));
+                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
+                }
+                else
+                {
+                    Rectangle rect = new Rectangle(
+                      Math.Min(startPoint.X, endPoint.X),
+                      Math.Min(startPoint.Y, endPoint.Y),
+                      Math.Abs(endPoint.X - startPoint.X),
+                      Math.Abs(endPoint.Y - startPoint.Y));
+                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
                 }
             }
+           
         }
+           
 
         public override bool isSelect(Point point)
         {
-             isInside = false;
+            isInside = false;
             using (GraphicsPath path = graphicsPath)
-            {
-                
-                    isInside = path.IsVisible(point);
-              
+            {  
+                isInside = path.IsVisible(point);            
             }
 
             return isInside;
@@ -61,7 +99,11 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                path.AddCurve(points.ToArray());
+                Rectangle rectangle = new Rectangle(Math.Min(startPoint.X, endPoint.X),
+                            Math.Min(startPoint.Y, endPoint.Y),
+                            Math.Abs(endPoint.X - startPoint.X),
+                            Math.Abs(endPoint.Y - startPoint.Y));
+                path.AddRectangle(rectangle);
                 return path;
             }
         }
