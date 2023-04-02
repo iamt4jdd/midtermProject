@@ -52,9 +52,17 @@ namespace midtermProject_Paint.models
             isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-
-                isInside = path.IsVisible(point);
-              
+                if (!isFill)
+                {
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
+                }
+                else
+                {
+                    isInside = path.IsVisible(point);
+                }
             }
 
             return isInside;

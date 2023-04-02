@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolPanel = new System.Windows.Forms.Panel();
             this.currentColorBtn = new System.Windows.Forms.Button();
             this.btnWidth = new System.Windows.Forms.NumericUpDown();
@@ -250,7 +251,7 @@
             // arcBtn
             // 
             this.arcBtn.BackColor = System.Drawing.Color.White;
-            this.arcBtn.BackgroundImage = global::midtermProject_Paint.Properties.Resources.curve;
+            this.arcBtn.BackgroundImage = global::midtermProject_Paint.Properties.Resources.arc;
             this.arcBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.arcBtn.Location = new System.Drawing.Point(94, 7);
             this.arcBtn.Name = "arcBtn";
@@ -341,7 +342,6 @@
             this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
             this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseUp);
             this.mainPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseClick);
-
             // 
             // Form1
             // 
@@ -350,7 +350,7 @@
             this.ClientSize = new System.Drawing.Size(1319, 955);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.toolPanel);
-            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Paint";
             this.Load += new System.EventHandler(this.Form1_Load);

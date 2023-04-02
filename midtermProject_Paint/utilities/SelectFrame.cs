@@ -70,16 +70,17 @@ namespace midtermProject_Paint.models {
                 startAngle = endAngle;
                 endAngle = temp;
             }
-
+           
             // Calculate the coordinates of the start and end points
             Point start = new Point((int)(centerX + radius * Math.Cos(startAngle)),
                                     (int)(centerY + radius * Math.Sin(startAngle)));
             Point end = new Point((int)(centerX + radius * Math.Cos(endAngle)),
-                                  (int)(centerY + radius * Math.Sin(endAngle)));
-
+                                  (int)(centerY + radius * Math.Sin(endAngle * Math.PI/1080)));
+            end.X = endPoint.X;
+      
             // Draw the select points at the start and end points of the arc
             graphics.FillRectangle(brush, new Rectangle(start.X - 5, start.Y + 10, 10, 10));
-            graphics.FillRectangle(brush, new Rectangle(end.X - 5, end.Y - 5, 10, 10));
+            graphics.FillRectangle(brush, new Rectangle(end.X - 5, end.Y - 10, 10, 10));
 
         }
 

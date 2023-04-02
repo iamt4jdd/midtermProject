@@ -382,48 +382,7 @@ namespace midtermProject_Paint
                
             }
 
-            if (e.Button == MouseButtons.Left)
-            {
-                if (isCtrlPressed)
-                {
-                    
-                    bool alreadySelected = false;
-                    foreach (Shape shape in selectedShapeList)
-                    {
-                        if (shape.isSelect(e.Location))
-                        {
-                            alreadySelected = true;
-                            break;
-                        }
-                    }
-                   
-                  
-                    if (!alreadySelected)
-                    {
-                        for (int i = shapeList.Count - 1; i >= 0; i--)
-                        {
-                            if (shapeList[i].isSelect(e.Location))
-                            {
-                                selectedShapeList.Add(shapeList[i]);
-                                break;
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        for (int i = selectedShapeList.Count - 1; i >= 0; i--)
-                        {
-                            if (selectedShapeList[i].isSelect(e.Location))
-                            {
-                                selectedShapeList.RemoveAt(i);
-                                break;
-                            }
-                        }
-                    }
-
-                    mainPanel.Invalidate();
-                }
-            }
+           
         }
       
 
@@ -495,7 +454,21 @@ namespace midtermProject_Paint
 
         private void groupBtn_Click(object sender, EventArgs e)
         {
-
+            //if (shapeList.Count(shape => shape.isSelected) > 1)
+            //{
+            //    GroupShape group = new GroupShape();
+            //    for (int i = 0; i < shapeList.Count; i++)
+            //    {
+            //        if (shapeList[i].isSelected)
+            //        {
+            //            group.addShape(shapeList[i]);
+            //            shapeList.RemoveAt(i--);
+            //        }
+            //    }
+            //    group.isSelected = true;
+            //    shapeList.Add(group);
+            //    this.mainPanel.Invalidate();
+            //}
         }
         
         private void unGroupBtn_Click(object sender, EventArgs e)
