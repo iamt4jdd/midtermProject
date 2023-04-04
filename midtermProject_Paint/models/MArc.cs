@@ -27,53 +27,15 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-            int startAngle = 0;
-            int sweepAngle = -180;
-            using (Pen myPen = new Pen(color, width))
+
+            using (GraphicsPath path = graphicsPath)
             {
-                if (startPoint.Y > endPoint.Y) // If startPoint is below endPoint
+                using (Pen myPen = new Pen(color, width))
                 {
-                    startAngle = 0;
-                    sweepAngle = 180;
-                }
-                if (Math.Abs(endPoint.Y - startPoint.Y) == 0 && Math.Abs(endPoint.X - startPoint.X) == 0)
-                {
-                    Rectangle rect = new Rectangle(
-                     Math.Min(startPoint.X, endPoint.X),
-                     Math.Min(startPoint.Y, endPoint.Y),
-                     Math.Abs(endPoint.X - startPoint.X + 10),
-                     Math.Abs(endPoint.Y - startPoint.Y + 10));
-                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
-                }
-                else if (Math.Abs(endPoint.Y - startPoint.Y) == 0)
-                {
-                    Rectangle rect = new Rectangle(
-                     Math.Min(startPoint.X, endPoint.X),
-                     Math.Min(startPoint.Y, endPoint.Y),
-                     Math.Abs(endPoint.X - startPoint.X),
-                     Math.Abs(endPoint.Y - startPoint.Y + 10));
-                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
-                }
-                else if (Math.Abs(endPoint.X - startPoint.X) == 0)
-                {
-                    Rectangle rect = new Rectangle(
-                    Math.Min(startPoint.X, endPoint.X),
-                    Math.Min(startPoint.Y, endPoint.Y),
-                    Math.Abs(endPoint.X - startPoint.X + 10),
-                    Math.Abs(endPoint.Y - startPoint.Y));
-                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
-                }
-                else
-                {
-                    Rectangle rect = new Rectangle(
-                      Math.Min(startPoint.X, endPoint.X),
-                      Math.Min(startPoint.Y, endPoint.Y),
-                      Math.Abs(endPoint.X - startPoint.X),
-                      Math.Abs(endPoint.Y - startPoint.Y));
-                    graphic.DrawArc(myPen, rect, startAngle, sweepAngle);
+                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    graphic.DrawPath(myPen, path);
                 }
             }
-           
         }
            
 
@@ -82,7 +44,17 @@ namespace midtermProject_Paint.models
             isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                isInside = path.IsVisible(point);
+                if (!isFill)
+                {
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
+                }
+                else
+                {
+                    isInside = path.IsVisible(point);
+                }
             }
 
             return isInside;
@@ -99,13 +71,54 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                Rectangle rectangle = new Rectangle(Math.Min(startPoint.X, endPoint.X),
-                            Math.Min(startPoint.Y, endPoint.Y),
-                            Math.Abs(endPoint.X - startPoint.X),
-                            Math.Abs(endPoint.Y - startPoint.Y));
-                path.AddRectangle(rectangle);
+                int startAngle = 0;
+                int sweepAngle = -180;
+               
+                    if (startPoint.Y > endPoint.Y) // If startPoint is below endPoint
+                    {
+                        startAngle = 0;
+                        sweepAngle = 180;
+                    }
+                    if (Math.Abs(endPoint.Y - startPoint.Y) == 0 && Math.Abs(endPoint.X - startPoint.X) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                         Math.Min(startPoint.X, endPoint.X),
+                         Math.Min(startPoint.Y, endPoint.Y),
+                         Math.Abs(endPoint.X - startPoint.X + 10),
+                         Math.Abs(endPoint.Y - startPoint.Y + 10));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else if (Math.Abs(endPoint.Y - startPoint.Y) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                         Math.Min(startPoint.X, endPoint.X),
+                         Math.Min(startPoint.Y, endPoint.Y),
+                         Math.Abs(endPoint.X - startPoint.X),
+                         Math.Abs(endPoint.Y - startPoint.Y + 10));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else if (Math.Abs(endPoint.X - startPoint.X) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                        Math.Min(startPoint.X, endPoint.X),
+                        Math.Min(startPoint.Y, endPoint.Y),
+                        Math.Abs(endPoint.X - startPoint.X + 10),
+                        Math.Abs(endPoint.Y - startPoint.Y));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else
+                    {
+                        Rectangle rect = new Rectangle(
+                          Math.Min(startPoint.X, endPoint.X),
+                          Math.Min(startPoint.Y, endPoint.Y),
+                          Math.Abs(endPoint.X - startPoint.X),
+                          Math.Abs(endPoint.Y - startPoint.Y));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                
                 return path;
             }
         }
+
     }
 }

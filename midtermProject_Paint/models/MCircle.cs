@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace midtermProject_Paint.models
 {
-    public class MCircle : Shape
+    public class MCircle : MEllipse
     {
 
        
@@ -26,27 +26,19 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-            if (!isFill)
+            using (GraphicsPath path = graphicsPath)
             {
-                using (Pen myPen = new Pen(color, width))
+                using (Pen myPen = new Pen(this.color, this.width))
                 {
                     if (isDash) myPen.DashStyle = DashStyle.Dash;
-                    int diameter = (int)Math.Sqrt(Math.Pow(this.endPoint.X - this.startPoint.X, 2) + Math.Pow(this.endPoint.Y - this.startPoint.Y, 2));
-                    int radius = diameter / 2;
-                    int centerX = Math.Min(this.startPoint.X, this.endPoint.X) + radius;
-                    int centerY = Math.Min(this.startPoint.Y, this.endPoint.Y) + radius;
-                    graphic.DrawEllipse(myPen, centerX - radius, centerY - radius, diameter, diameter);
+                    graphic.DrawPath(myPen, path);
                 }
-            }
-            else
-            {
-                using (Brush myBrush = new SolidBrush(color))
+                if (this.isFill)
                 {
-                    int diameter = (int)Math.Sqrt(Math.Pow(this.endPoint.X - this.startPoint.X, 2) + Math.Pow(this.endPoint.Y - this.startPoint.Y, 2));
-                    int radius = diameter / 2;
-                    int centerX = Math.Min(this.startPoint.X, this.endPoint.X) + radius;
-                    int centerY = Math.Min(this.startPoint.Y, this.endPoint.Y) + radius;
-                    graphic.FillEllipse(myBrush, centerX - radius, centerY - radius, diameter, diameter);
+                    using (Brush brush = new SolidBrush(this.color))
+                    {
+                        graphic.FillPath(brush, path);
+                    }
                 }
             }
         }
@@ -83,7 +75,9 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-         
+                int Diameter = ((endPoint.X - startPoint.X) + (endPoint.Y - startPoint.Y)) / 2;
+                path.AddEllipse(new Rectangle(startPoint.X, startPoint.Y, Diameter, Diameter));
+                endPoint = new Point(startPoint.X + Diameter, startPoint.Y + Diameter);
                 return path;
             }
         }

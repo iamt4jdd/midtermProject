@@ -24,10 +24,14 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-            using (Pen myPen = new Pen(color, width))
+
+            using (GraphicsPath path = graphicsPath)
             {
-                if (isDash) myPen.DashStyle = DashStyle.Dash;
-                graphic.DrawLine(myPen, this.startPoint, this.endPoint);
+                using (Pen myPen = new Pen(color, width))
+                {
+                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    graphic.DrawPath(myPen, path);
+                }
             }
         }
 

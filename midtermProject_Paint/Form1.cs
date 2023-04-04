@@ -64,9 +64,6 @@ namespace midtermProject_Paint
         private void mainPanel_Paint(object sender, PaintEventArgs e)
         {
             // DrawGraphic.getDrawing(graphic, myPen);
-
-           
-            
             shapeList.ForEach((shape) =>
             {   
                 if (selectedShape != null || isMoving)
@@ -87,9 +84,9 @@ namespace midtermProject_Paint
                         }
                         else if (selectedShape is MArc)
                         {
-                            SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
-                                                         selectedShape.startPoint,
-                                                         selectedShape.endPoint);
+                            //SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
+                            //                             selectedShape.startPoint,
+                            //                             selectedShape.endPoint);
                         }
                         else 
                         {
@@ -206,8 +203,7 @@ namespace midtermProject_Paint
                 }
             }
 
-            Console.WriteLine(selectedShape);
-            Console.WriteLine(selectedShapeList.Count());
+
     
             isMouseDown = true;
             switch (graphicType)

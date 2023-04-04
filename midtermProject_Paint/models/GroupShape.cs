@@ -17,19 +17,8 @@ namespace midtermProject_Paint.models
         {
             this.name = "Group";
         }
-
-        public Shape this[int index]
-        {
-            get
-            {
-                return shapes[index];
-            }
-            set
-            {
-                shapes[index] = value;
-            }
-        }
-
+        
+        
         private GraphicsPath[] graphicsPaths
         {
             get
@@ -205,7 +194,7 @@ namespace midtermProject_Paint.models
             endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
         }
 
-        protected override System.Drawing.Drawing2D.GraphicsPath graphicsPath
+        protected override GraphicsPath graphicsPath
         {
             get { throw new NotImplementedException(); }
         }
