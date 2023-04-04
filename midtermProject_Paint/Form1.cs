@@ -65,10 +65,56 @@ namespace midtermProject_Paint
         {
             // DrawGraphic.getDrawing(graphic, myPen);
             shapeList.ForEach((shape) =>
-            {   
-                if (selectedShape != null || isMoving)
+            {
+                shape.drawShape(e.Graphics);
+                if (graphicType == GraphicType.Group)
                 {
-                    shape.drawShape(e.Graphics);
+                    if (shape.isSelected == true)
+                    {
+                        if (shape is MPolygon polygon)
+                        {
+                            SelectFrame.DrawSelectPointsPolygon(e.Graphics, MovingBrush, polygon.points);
+                        }
+                        else if (shape is MLine)
+                        {
+                            SelectFrame.DrawSelectPointsLine(e.Graphics, MovingBrush,
+                                                         shape.startPoint,
+                                                         shape.endPoint);
+                        }
+                        else if (shape is MArc)
+                        {
+                            //SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
+                            //                             selectedShape.startPoint,
+                            //                             selectedShape.endPoint);
+                        }
+                        else
+                        {
+                            SelectFrame.DrawSelectPoints(e.Graphics, MovingBrush,
+                                                         shape.startPoint,
+                                                         shape.endPoint);
+                        }
+                        if (!(shape is MLine) && !(shape is MArc))
+                        {
+                            
+                                SelectFrame.DrawSelectFrame(e.Graphics, MovingFrame,
+                                new Rectangle(shape.startPoint.X,
+                                shape.startPoint.Y,
+                                shape.endPoint.X - shape.startPoint.X,
+                                shape.endPoint.Y - shape.startPoint.Y));
+                            
+                        }
+                        graphicType = GraphicType.Select;
+                        shape.isSelected = false;
+                    }
+                    else
+                    {
+                        shape.drawShape(e.Graphics);
+                    }
+
+                }
+                else if (selectedShape != null || isMoving)
+                {
+                    
                     selectedShapeList.ForEach((selectedShape) =>
                     {   
                         
@@ -303,6 +349,7 @@ namespace midtermProject_Paint
 
         private void mainPanel_MouseMove(object sender, MouseEventArgs e)
         {
+
             if (selectedShape != null && selectedShape.isInside == true && graphicType == GraphicType.Select)
             {
                 this.Cursor = Cursors.SizeAll;
@@ -339,7 +386,8 @@ namespace midtermProject_Paint
                     this.mainPanel.Refresh();
                 
             }
-           
+
+            
         }
        
             
@@ -354,6 +402,7 @@ namespace midtermProject_Paint
             if (isMoving)
             {
                 deleteShape = selectedShape;
+                Console.WriteLine($"{deleteShape.name}, {selectedShape.name}");
                 selectedShape = null;
                 isMoving = false;
             }
@@ -450,25 +499,39 @@ namespace midtermProject_Paint
 
         private void groupBtn_Click(object sender, EventArgs e)
         {
-            //if (shapeList.Count(shape => shape.isSelected) > 1)
-            //{
-            //    GroupShape group = new GroupShape();
-            //    for (int i = 0; i < shapeList.Count; i++)
-            //    {
-            //        if (shapeList[i].isSelected)
-            //        {
-            //            group.addShape(shapeList[i]);
-            //            shapeList.RemoveAt(i--);
-            //        }
-            //    }
-            //    group.isSelected = true;
-            //    shapeList.Add(group);
-            //    this.mainPanel.Invalidate();
-            //}
+            graphicType = GraphicType.Group;
+            if (selectedShapeList.Count() > 1)
+            {
+                GroupShape group = new GroupShape();
+                selectedShapeList.ForEach((shape) =>
+                {
+                    group.addShape(shape);
+                    shapeList.Remove(shape);
+                });
+                group.LinkShapes();
+                group.isSelected = true;
+                shapeList.Add(group);
+                deleteShape = group;
+                selectedShapeList.Clear();
+                this.mainPanel.Invalidate();
+                Console.WriteLine(selectedShapeList.Count());
+            }
+            
+
         }
         
         private void unGroupBtn_Click(object sender, EventArgs e)
         {
+
+            GroupShape group = new GroupShape();
+            group = (GroupShape)deleteShape;
+            group.UnGroup(shapeList);
+            shapeList.Remove(group);
+            this.mainPanel.Invalidate();
+            deleteShape = null;
+            graphicType = GraphicType.Select;
+
+
 
         }
 
@@ -476,10 +539,10 @@ namespace midtermProject_Paint
         {
             graphicType = GraphicType.Select;
             shapeList.Remove(deleteShape);
-            foreach(var shape in selectedShapeList)
+            selectedShapeList.ForEach((shape) =>
             {
                 shapeList.Remove(shape);
-            }
+            });
             selectedShapeList.Clear();
             this.mainPanel.Invalidate();
         }

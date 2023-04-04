@@ -36,11 +36,53 @@ namespace midtermProject_Paint.models
                     else if (shapes[i] is MArc)
                     {
                         MArc arc = (MArc)shapes[i];
-                        Rectangle rectangle = new Rectangle(Math.Min(startPoint.X, endPoint.X),
-                            Math.Min(startPoint.Y, endPoint.Y),
-                            Math.Abs(endPoint.X - startPoint.X),
-                            Math.Abs(endPoint.Y - startPoint.Y));
-                        path.AddRectangle(rectangle);
+                        int startAngle = 0;
+                        int sweepAngle = -180;
+
+                        if (startPoint.Y > endPoint.Y) // If startPoint is below endPoint
+                        {
+                            startAngle = 0;
+                            sweepAngle = 180;
+                        }
+                        if (Math.Abs(arc.endPoint.Y - arc.startPoint.Y) == 0 && Math.Abs(arc.endPoint.X - arc.startPoint.X) == 0)
+                        {
+                            Rectangle rect = new Rectangle(
+                             Math.Min(arc.startPoint.X, arc.endPoint.X),
+                             Math.Min(arc.startPoint.Y, arc.endPoint.Y),
+                             Math.Abs(arc.endPoint.X - arc.startPoint.X + 10),
+                             Math.Abs(arc.endPoint.Y - arc.startPoint.Y + 10));
+                            path.AddArc(rect, startAngle, sweepAngle);
+                        }
+                        else if (Math.Abs(arc.endPoint.Y - arc.startPoint.Y) == 0)
+                        {
+                            Rectangle rect = new Rectangle(
+                             Math.Min(arc.startPoint.X, arc.endPoint.X),
+                             Math.Min(arc.startPoint.Y, arc.endPoint.Y),
+                             Math.Abs(arc.endPoint.X - arc.startPoint.X),
+                             Math.Abs(arc.endPoint.Y - arc.startPoint.Y + 10));
+                            path.AddArc(rect, startAngle, sweepAngle);
+                        }
+                        else if (Math.Abs(arc.endPoint.X - arc.startPoint.X) == 0)
+                        {
+                            Rectangle rect = new Rectangle(
+                            Math.Min(arc.startPoint.X, arc.endPoint.X),
+                            Math.Min(arc.startPoint.Y, arc.endPoint.Y),
+                            Math.Abs(arc.endPoint.X - arc.startPoint.X + 10),
+                            Math.Abs(arc.endPoint.Y - arc.startPoint.Y));
+                            path.AddArc(rect, startAngle, sweepAngle);
+                        }
+                        else
+                        {
+                            Rectangle rect = new Rectangle(
+                              Math.Min(startPoint.X, endPoint.X),
+                              Math.Min(startPoint.Y, endPoint.Y),
+                              Math.Abs(endPoint.X - startPoint.X),
+                              Math.Abs(endPoint.Y - startPoint.Y));
+                            path.AddArc(rect, startAngle, sweepAngle);
+                        }
+
+
+                      
                     }
                     else if (shapes[i] is MEllipse)
                     {
@@ -54,10 +96,10 @@ namespace midtermProject_Paint.models
                     {
                         MRectangle rect = (MRectangle)shapes[i];
 
-                        path.AddRectangle(new RectangleF(rect.startPoint.X,
-                            rect.startPoint.Y,
-                            rect.endPoint.X - rect.startPoint.X,
-                            rect.endPoint.Y - rect.startPoint.Y));
+                        path.AddRectangle(new RectangleF(Math.Min(rect.startPoint.X, rect.endPoint.X),
+                            Math.Min(rect.startPoint.Y, rect.endPoint.Y),
+                            Math.Abs(rect.endPoint.X - rect.startPoint.X),
+                            Math.Abs(rect.endPoint.Y - rect.startPoint.Y)));
                     }
                     else if (shapes[i] is MPolygon)
                     {
@@ -126,7 +168,7 @@ namespace midtermProject_Paint.models
 
         public override bool isSelect(Point point)
         {
-
+          
             GraphicsPath[] paths = graphicsPaths;
             for (int i = 0; i < paths.Length; i++)
             {
@@ -194,6 +236,69 @@ namespace midtermProject_Paint.models
             endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
         }
 
+        public void LinkShapes()
+        {
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxY = int.MinValue;
+
+            for (int i = 0; i < this.shapes.Count; i++)
+            {
+                Shape shape = shapes[i];
+
+                if (shape is MPolygon polygon)
+                {
+                    polygon.LinkPoints();
+                }
+                if (shape.startPoint.X < minX)
+                {
+                    minX = shape.startPoint.X;
+                }
+                if (shape.endPoint.X < minX)
+                {
+                    minX = shape.endPoint.X;
+                }
+
+                if (shape.startPoint.Y < minY)
+                {
+                    minY = shape.startPoint.Y;
+                }
+                if (shape.endPoint.Y < minY)
+                {
+                    minY = shape.endPoint.Y;
+                }
+
+                if (shape.startPoint.X > maxX)
+                {
+                    maxX = shape.startPoint.X;
+                }
+                if (shape.endPoint.X > maxX)
+                {
+                    maxX = shape.endPoint.X;
+                }
+
+                if (shape.startPoint.Y > maxY)
+                {
+                    maxY = shape.startPoint.Y;
+                }
+                if (shape.endPoint.Y > maxY)
+                {
+                    maxY = shape.endPoint.Y;
+                }
+            }
+
+            this.startPoint = new Point(minX, minY);
+            this.endPoint = new Point(maxX, maxY);
+        }
+        public void UnGroup(List<Shape> Shapes)
+        {
+            foreach (var shape in shapes)
+            {
+                shape.isSelected = false;
+                Shapes.Add(shape);
+            }
+        }
         protected override GraphicsPath graphicsPath
         {
             get { throw new NotImplementedException(); }

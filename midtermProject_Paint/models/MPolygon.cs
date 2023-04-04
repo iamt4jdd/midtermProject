@@ -90,6 +90,24 @@ namespace midtermProject_Paint.models
             }
         }
 
+        public void LinkPoints()
+        {
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxY = int.MinValue;
+
+            this.points.ForEach(p =>
+            {
+                if (minX > p.X) { minX = p.X; }
+                if (minY > p.Y) { minY = p.Y; }
+                if (maxX < p.X) { maxX = p.X; }
+                if (maxY < p.Y) { maxY = p.Y; }
+            });
+            startPoint = new Point(minX, minY);
+            endPoint = new Point(maxX, maxY);
+        }
+
         protected override GraphicsPath graphicsPath
         {
             get
