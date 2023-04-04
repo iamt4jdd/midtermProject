@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
 using midtermProject_Paint.models;
-using midtermProject_Paint.controller.Draw;
 using midtermProject_Paint.utilities;
 
 
@@ -330,8 +329,7 @@ namespace midtermProject_Paint
                         MPolygon polygon = shapeList[shapeList.Count - 1] as MPolygon;
                         polygon.points[polygon.points.Count - 1] = e.Location;
                         polygon.points.Add(e.Location);
-                        Console.WriteLine(polygon);
-                        Console.WriteLine(polygon.points);
+                     
                     }
                     isMouseDown = false;
                     mainPanel.Invalidate();
@@ -402,7 +400,7 @@ namespace midtermProject_Paint
             if (isMoving)
             {
                 deleteShape = selectedShape;
-                Console.WriteLine($"{deleteShape.name}, {selectedShape.name}");
+               
                 selectedShape = null;
                 isMoving = false;
             }
