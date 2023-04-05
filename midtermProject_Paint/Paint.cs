@@ -15,7 +15,7 @@ using midtermProject_Paint.utilities;
 
 namespace midtermProject_Paint
 {
-    public partial class Form1 : Form
+    public partial class Paint : Form
     {
         //private IDrawGraphic DrawGraphic;
         //Graphics graphic;
@@ -37,7 +37,7 @@ namespace midtermProject_Paint
         };
       
 
-        public Form1()
+        public Paint()
         {
             InitializeComponent();
             initComponents();
@@ -348,6 +348,8 @@ namespace midtermProject_Paint
         private void mainPanel_MouseMove(object sender, MouseEventArgs e)
         {
 
+
+
             if (selectedShape != null && selectedShape.isInside == true && graphicType == GraphicType.Select)
             {
                 this.Cursor = Cursors.SizeAll;
@@ -355,6 +357,12 @@ namespace midtermProject_Paint
             else
             {
                 this.Cursor = Cursors.Default;
+            }
+
+
+            if(!(selectedShape is GroupShape))
+            {
+                
             }
 
             if (isMoving && graphicType == GraphicType.Select)

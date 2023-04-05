@@ -1,6 +1,6 @@
 ﻿namespace midtermProject_Paint
 {
-    partial class Form1
+    partial class Paint
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Paint));
             this.toolPanel = new System.Windows.Forms.Panel();
             this.currentColorBtn = new System.Windows.Forms.Button();
             this.btnWidth = new System.Windows.Forms.NumericUpDown();

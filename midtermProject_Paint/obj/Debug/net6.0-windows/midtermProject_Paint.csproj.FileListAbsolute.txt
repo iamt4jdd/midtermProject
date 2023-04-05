@@ -15,4 +15,4 @@ D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\mid
 D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\midtermProject_Paint\midtermProject_Paint\obj\Debug\net6.0-windows\midtermProject_Paint.genruntimeconfig.cache
 D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\midtermProject_Paint\midtermProject_Paint\obj\Debug\net6.0-windows\ref\midtermProject_Paint.dll
 D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\midtermProject_Paint\midtermProject_Paint\obj\Debug\net6.0-windows\midtermProject_Paint.Properties.Resources.resources
-D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\midtermProject_Paint\midtermProject_Paint\obj\Debug\net6.0-windows\midtermProject_Paint.Form1.resources
+D:\Study\School document\Nam 2 hoc ki 2\Windows Programming\MIDTERM PROJECTS\midtermProject_Paint\midtermProject_Paint\obj\Debug\net6.0-windows\midtermProject_Paint.Paint.resources

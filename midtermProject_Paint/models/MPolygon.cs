@@ -108,6 +108,27 @@ namespace midtermProject_Paint.models
             endPoint = new Point(maxX, maxY);
         }
 
+      
+
+        public override int SelectControlPoint(Point p)
+        {
+            for (int i = 0; i < points.Count; i++)
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddRectangle(new Rectangle(points[i].X - 4, points[i].Y - 4, 8, 8));
+
+                if (path.IsVisible(p)) return i;
+            }
+            return -1;
+        }
+
+        public override void moveControlPoint(Point pointCurrent, Point previous, int index)
+        {
+            int deltaX = pointCurrent.X - previous.X;
+            int deltaY = pointCurrent.Y - previous.Y;
+            points[index] = new Point(points[index].X + deltaX, points[index].Y + deltaY);
+        }
+
         protected override GraphicsPath graphicsPath
         {
             get
