@@ -11,51 +11,53 @@ namespace midtermProject_Paint.models
 {
     public class MArc : Shape
     {
-        public List<Point> points;
+      
 
         public MArc()
         {
             name = "Arc";
-            points = new List<Point>();
+          
         }
 
         public MArc(Color color)
         {
             name = "Arc";
             this.color = color;
-            points = new List<Point>();
         }
 
         public override void drawShape(Graphics graphic)
         {
+
             using (GraphicsPath path = graphicsPath)
             {
-                using (Pen pen = new Pen(color, width))
+                using (Pen myPen = new Pen(color, width))
                 {
-                    graphic.DrawPath(pen, path);
+                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    graphic.DrawPath(myPen, path);
                 }
             }
         }
+           
 
         public override bool isSelect(Point point)
         {
-            bool inside = false;
+            isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                if (isFill)
+                if (!isFill)
                 {
-                    inside = path.IsVisible(point);
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
                 }
                 else
                 {
-                    using (Pen pen = new Pen(color, width + 3))
-                    {
-                        inside = path.IsOutlineVisible(point, pen);
-                    }
+                    isInside = path.IsVisible(point);
                 }
             }
 
-            return inside;
+            return isInside;
         }
 
         public override void moveShape(Point distance)
@@ -69,9 +71,54 @@ namespace midtermProject_Paint.models
             get
             {
                 GraphicsPath path = new GraphicsPath();
-                path.AddCurve(points.ToArray());
+                int startAngle = 0;
+                int sweepAngle = -180;
+               
+                    if (startPoint.Y > endPoint.Y) // If startPoint is below endPoint
+                    {
+                        startAngle = 0;
+                        sweepAngle = 180;
+                    }
+                    if (Math.Abs(endPoint.Y - startPoint.Y) == 0 && Math.Abs(endPoint.X - startPoint.X) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                         Math.Min(startPoint.X, endPoint.X),
+                         Math.Min(startPoint.Y, endPoint.Y),
+                         Math.Abs(endPoint.X - startPoint.X + 10),
+                         Math.Abs(endPoint.Y - startPoint.Y + 10));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else if (Math.Abs(endPoint.Y - startPoint.Y) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                         Math.Min(startPoint.X, endPoint.X),
+                         Math.Min(startPoint.Y, endPoint.Y),
+                         Math.Abs(endPoint.X - startPoint.X),
+                         Math.Abs(endPoint.Y - startPoint.Y + 10));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else if (Math.Abs(endPoint.X - startPoint.X) == 0)
+                    {
+                        Rectangle rect = new Rectangle(
+                        Math.Min(startPoint.X, endPoint.X),
+                        Math.Min(startPoint.Y, endPoint.Y),
+                        Math.Abs(endPoint.X - startPoint.X + 10),
+                        Math.Abs(endPoint.Y - startPoint.Y));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                    else
+                    {
+                        Rectangle rect = new Rectangle(
+                          Math.Min(startPoint.X, endPoint.X),
+                          Math.Min(startPoint.Y, endPoint.Y),
+                          Math.Abs(endPoint.X - startPoint.X),
+                          Math.Abs(endPoint.Y - startPoint.Y));
+                        path.AddArc(rect, startAngle, sweepAngle);
+                    }
+                
                 return path;
             }
         }
+
     }
 }

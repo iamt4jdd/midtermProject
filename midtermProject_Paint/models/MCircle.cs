@@ -9,8 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace midtermProject_Paint.models
 {
-    public class MCircle : Shape
+    public class MCircle : MEllipse
     {
+
+       
         public MCircle()
         {
             name = "Circle";
@@ -24,48 +26,42 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-            if (!isFill)
+            using (GraphicsPath path = graphicsPath)
             {
-                using (Pen myPen = new Pen(color, width))
+                using (Pen myPen = new Pen(this.color, this.width))
                 {
                     if (isDash) myPen.DashStyle = DashStyle.Dash;
-                    graphic.DrawEllipse(myPen, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
+                    graphic.DrawPath(myPen, path);
                 }
-            }
-            else
-            {
-                using (Brush myBrush = new SolidBrush(color))
+                if (this.isFill)
                 {
-                    graphic.FillEllipse(myBrush, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
+                    using (Brush brush = new SolidBrush(this.color))
+                    {
+                        graphic.FillPath(brush, path);
+                    }
                 }
             }
         }
 
         public override bool isSelect(Point point)
         {
-            bool inside = false;
+            isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                if (isFill)
+                if (!isFill)
                 {
-                    inside = path.IsVisible(point);
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
                 }
                 else
                 {
-                    using (Pen pen = new Pen(color, width + 3))
-                    {
-                        inside = path.IsOutlineVisible(point, pen);
-                    }
+                    isInside = path.IsVisible(point);
                 }
             }
 
-            return inside;
+            return isInside;
         }
 
         public override void moveShape(Point distance)

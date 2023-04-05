@@ -61,23 +61,23 @@ namespace midtermProject_Paint.models
 
         public override bool isSelect(Point point)
         {
-            bool inside = false;
+            isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                if (isFill)
+                if (!isFill)
                 {
-                    inside = path.IsVisible(point);
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
                 }
                 else
                 {
-                    using (Pen pen = new Pen(color, width + 3))
-                    {
-                        inside = path.IsOutlineVisible(point, pen);
-                    }
+                    isInside = path.IsVisible(point);
                 }
             }
 
-            return inside;
+            return isInside;
         }
 
         public override void moveShape(Point distance)
@@ -88,6 +88,45 @@ namespace midtermProject_Paint.models
             {
                 points[i] = new Point(points[i].X + distance.X, points[i].Y + distance.Y);
             }
+        }
+
+        public void LinkPoints()
+        {
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxY = int.MinValue;
+
+            this.points.ForEach(p =>
+            {
+                if (minX > p.X) { minX = p.X; }
+                if (minY > p.Y) { minY = p.Y; }
+                if (maxX < p.X) { maxX = p.X; }
+                if (maxY < p.Y) { maxY = p.Y; }
+            });
+            startPoint = new Point(minX, minY);
+            endPoint = new Point(maxX, maxY);
+        }
+
+      
+
+        public override int SelectControlPoint(Point p)
+        {
+            for (int i = 0; i < points.Count; i++)
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddRectangle(new Rectangle(points[i].X - 4, points[i].Y - 4, 8, 8));
+
+                if (path.IsVisible(p)) return i;
+            }
+            return -1;
+        }
+
+        public override void moveControlPoint(Point pointCurrent, Point previous, int index)
+        {
+            int deltaX = pointCurrent.X - previous.X;
+            int deltaY = pointCurrent.Y - previous.Y;
+            points[index] = new Point(points[index].X + deltaX, points[index].Y + deltaY);
         }
 
         protected override GraphicsPath graphicsPath

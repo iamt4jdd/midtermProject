@@ -24,32 +24,30 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-            using (Pen myPen = new Pen(color, width))
+
+            using (GraphicsPath path = graphicsPath)
             {
-                if (isDash) myPen.DashStyle = DashStyle.Dash;
-                graphic.DrawLine(myPen, this.startPoint, this.endPoint);
+                using (Pen myPen = new Pen(color, width))
+                {
+                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    graphic.DrawPath(myPen, path);
+                }
             }
         }
 
         public override bool isSelect(Point point)
         {
-            bool inside = false;
+            isInside = false;
             using (GraphicsPath path = graphicsPath)
             {
-                if (isFill)
+                using (Pen pen = new Pen(color, width + 3))
                 {
-                    inside = path.IsVisible(point);
+                    isInside = path.IsOutlineVisible(point, pen);
                 }
-                else
-                {
-                    using (Pen pen = new Pen(color, width + 3))
-                    {
-                        inside = path.IsOutlineVisible(point, pen);
-                    }
-                }
+
             }
 
-            return inside;
+            return isInside;
         }
 
         public override void moveShape(Point distance)

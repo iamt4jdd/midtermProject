@@ -23,6 +23,8 @@ namespace midtermProject_Paint.models
 
         public bool isSelected { get; set; }
 
+        public bool isInside { get; set; }
+
         public bool isFill { get; set; }
 
         public bool isDash { get; set; }
@@ -36,6 +38,78 @@ namespace midtermProject_Paint.models
         public abstract bool isSelect(Point point);
 
         public abstract void moveShape(Point distance);
+
+        public static List<Point> getControlPoints(Shape shape)
+        {
+            List<Point> points = new List<Point>();
+            int xCenter = (shape.startPoint.X + shape.endPoint.X) / 2;
+            int yCenter = (shape.startPoint.Y + shape.endPoint.Y) / 2;
+            points.Add(new Point(shape.startPoint.X, shape.startPoint.Y));
+            points.Add(new Point(xCenter, shape.startPoint.Y));
+            points.Add(new Point(shape.endPoint.X, shape.startPoint.Y));
+            points.Add(new Point(shape.startPoint.X, yCenter));
+            points.Add(new Point(shape.endPoint.X, yCenter));
+            points.Add(new Point(shape.startPoint.X, shape.endPoint.Y));
+            points.Add(new Point(xCenter, shape.endPoint.Y));
+            points.Add(new Point(shape.endPoint.X, shape.endPoint.Y));
+            return points;
+        }
+        public virtual int SelectControlPoint(Point points)
+        {
+
+            List<Point> selectPoints = getControlPoints(this);
+            for (int i = 0; i < 8; i++)
+            {
+                GraphicsPath path = new GraphicsPath();
+                path.AddRectangle(new Rectangle(selectPoints[i].X - 4, selectPoints[i].Y - 4, 8, 8));
+
+                if (path.IsVisible(points)) return i;
+            }
+            return -1;
+
+        }
+
+        public virtual void changePoint(int index)
+        {
+            if (index == 0 || index == 1 || index == 3)
+            {
+                Point point = startPoint;
+                startPoint = endPoint;
+                endPoint = point;
+            }
+            if (index == 2)
+            {
+                int a = endPoint.X;
+                int b = startPoint.Y;
+                startPoint = new Point(startPoint.X, endPoint.Y);
+                endPoint = new Point(a, b);
+            }
+            if (index == 5)
+            {
+                int a = startPoint.X;
+                int b = endPoint.Y;
+                startPoint = new Point(endPoint.X, startPoint.Y);
+                endPoint = new Point(a, b);
+            }
+        }
+
+        public virtual void moveControlPoint(Point pointCurrent, Point previous, int index)
+        {
+            int deltaX = pointCurrent.X - previous.X;
+            int deltaY = pointCurrent.Y - previous.Y;
+            if (index == 1 || index == 6)
+            {
+                endPoint = new Point(endPoint.X, endPoint.Y + deltaY);
+            }
+            else if (index == 3 || index == 4)
+            {
+                endPoint = new Point(endPoint.X + deltaX, endPoint.Y);
+            }
+            else
+            {
+                endPoint = pointCurrent;
+            }
+        }
 
         protected abstract GraphicsPath graphicsPath { get; }
         

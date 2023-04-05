@@ -47,7 +47,26 @@ namespace midtermProject_Paint.models
             }
             
         }
+        public override bool isSelect(Point point)
+        {
+            isInside = false;
+            using (GraphicsPath path = graphicsPath)
+            {
+                if (!isFill)
+                {
+                    using (Pen pen = new Pen(this.color, this.width + 3))
+                    {
+                        isInside = path.IsOutlineVisible(point, pen);
+                    }
+                }
+                else
+                {
+                    isInside = path.IsVisible(point);
+                }
+            }
 
+            return isInside;
+        }
         public override void moveShape(Point distance)
         {
             startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
