@@ -106,6 +106,13 @@ namespace midtermProject_Paint.models
                         MPolygon polygon = (MPolygon)shapes[i];
                         path.AddPolygon(polygon.points.ToArray());
                     }
+                    else if (shapes[i] is MPen pen)
+                    {
+                        for (int j = 0; j < pen.points.Count - 1; j++)
+                        {
+                            path.AddLine(pen.points[j], pen.points[j + 1]);
+                        }
+                    }
                     else if (shapes[i] is GroupShape)
                     {
                         GroupShape group = (GroupShape)shapes[i];
@@ -144,9 +151,10 @@ namespace midtermProject_Paint.models
                         }
                         else
                         {
-                            using (Pen pen = new Pen(shapes[i].color, shapes[i].width))
+
+                            using (Pen myPen = new Pen(shapes[i].color, shapes[i].width))
                             {
-                                graphic.DrawPath(pen, path);
+                                graphic.DrawPath(myPen, path);
                             }
                         }
                     }
@@ -155,11 +163,12 @@ namespace midtermProject_Paint.models
                         GroupShape group = (GroupShape)shapes[i];
                         group.drawShape(graphic);
                     }
+                   
                     else
                     {
-                        using (Pen pen = new Pen(shapes[i].color, shapes[i].width))
+                        using (Pen myPen = new Pen(shapes[i].color, shapes[i].width))
                         {
-                            graphic.DrawPath(pen, path);
+                            graphic.DrawPath(myPen, path);
                         }
                     }
                 }
@@ -222,15 +231,9 @@ namespace midtermProject_Paint.models
         {
             for (int i = 0; i < shapes.Count; i++)
             {
-                if (shapes[i] is GroupShape)
-                {
-                    GroupShape group = (GroupShape)shapes[i];
-                    group.moveShape(distance);
-                }
-                else
-                {
+                
                     shapes[i].moveShape(distance);
-                }
+                
             }
             startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
             endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);

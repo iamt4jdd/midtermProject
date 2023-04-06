@@ -8,6 +8,7 @@ namespace midtermProject_Paint.utilities
 {
     public enum GraphicType
     {
+        Pen,
         Line,
         Rectangle,
         Ellipse,

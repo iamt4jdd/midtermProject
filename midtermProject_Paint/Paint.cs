@@ -26,9 +26,10 @@ namespace midtermProject_Paint
         Color color;
         int width;
         bool isMouseDown;
-        bool isFill, isDash, isPolygon, isMoving = false, isCtrlPressed = false;
+        bool isFill, isDash, isPen, isPolygon, isMoving = false, isCtrlPressed = false;
         Shape selectedShape, deleteShape;
-        Point previousPoint;
+        Point previousPoint, currentPoint;
+        int resizePoint;
 
         Brush MovingBrush = new SolidBrush(Color.FromArgb(61, 165, 129));
         Pen MovingFrame = new Pen(Color.FromArgb(0, 30, 81), 1.5f)
@@ -56,13 +57,14 @@ namespace midtermProject_Paint
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            graphicType = GraphicType.Pen;
         }
 
         //Drawing implementation
         private void mainPanel_Paint(object sender, PaintEventArgs e)
         {
             // DrawGraphic.getDrawing(graphic, myPen);
+       
             shapeList.ForEach((shape) =>
             {
                 shape.drawShape(e.Graphics);
@@ -92,7 +94,7 @@ namespace midtermProject_Paint
                                                          shape.startPoint,
                                                          shape.endPoint);
                         }
-                        if (!(shape is MLine) && !(shape is MArc))
+                        if (!(shape is MLine) && !(shape is MArc) && !(shape is MPen))
                         {
                             
                                 SelectFrame.DrawSelectFrame(e.Graphics, MovingFrame,
@@ -121,7 +123,7 @@ namespace midtermProject_Paint
                         {
                             SelectFrame.DrawSelectPointsPolygon(e.Graphics, MovingBrush, polygon.points);
                         }
-                        else if (selectedShape is MLine)
+                        else if (selectedShape is MLine || selectedShape is MPen)
                         {
                             SelectFrame.DrawSelectPointsLine(e.Graphics, MovingBrush,
                                                          selectedShape.startPoint,
@@ -139,7 +141,7 @@ namespace midtermProject_Paint
                                                          selectedShape.startPoint,
                                                          selectedShape.endPoint);
                         }
-                        if (!(selectedShape is MLine) && !(selectedShape is MArc))
+                        if (!(selectedShape is MLine) && !(selectedShape is MArc) && !(selectedShape is MPen))
                         {                    
                             if (selectedShape.startPoint.X < selectedShape.endPoint.X 
                             && selectedShape.startPoint.Y < selectedShape.endPoint.Y)
@@ -204,6 +206,7 @@ namespace midtermProject_Paint
                     {   
                         for (int i = shapeList.Count - 1; i >= 0; i--)
                         {
+                            
                             if (shapeList[i].isSelect(e.Location))
                             {
                                 
@@ -229,6 +232,14 @@ namespace midtermProject_Paint
                 {
                     for (int i = 0; i < shapeList.Count; i++)
                     {
+                        if (!(shapeList[i] is MPen))
+                            resizePoint = shapeList[i].SelectControlPoint(e.Location);
+                        if (resizePoint != -1)
+                        {
+                            shapeList[i].changePoint(resizePoint);
+                            selectedShape = shapeList[i];
+                            break;
+                        }
                         if (shapeList[i].isSelect(e.Location))
                         {
                             selectedShape = shapeList[i];
@@ -245,6 +256,16 @@ namespace midtermProject_Paint
                             }
                         }
                     }
+                    if (resizePoint != -1)
+                    {
+                        currentPoint = e.Location;
+                    }
+                    else if (selectedShape != null)
+                    {
+                        isMoving = true;
+                        currentPoint = e.Location;
+                    }
+                   
                 }
             }
 
@@ -253,6 +274,17 @@ namespace midtermProject_Paint
             isMouseDown = true;
             switch (graphicType)
             {
+                case GraphicType.Pen:
+                    addShape(new MPen
+                    {
+                        startPoint = e.Location,
+                        endPoint = e.Location,
+                        width = width,
+                        color = color,
+                        isDash = isDash,
+                    });
+                    isPen = true;
+                    break;
                 case GraphicType.Line:
                     addShape(new MLine
                     {
@@ -349,21 +381,32 @@ namespace midtermProject_Paint
         {
 
 
-
-            if (selectedShape != null && selectedShape.isInside == true && graphicType == GraphicType.Select)
+            this.Cursor = Cursors.Default;
+            if (graphicType == GraphicType.Select)
             {
-                this.Cursor = Cursors.SizeAll;
-            }
-            else
-            {
-                this.Cursor = Cursors.Default;
+                for (int i = 0; i < shapeList.Count; i++)
+                {
+                    if (shapeList[i].isSelect(e.Location))
+                    {
+                        mainPanel.Cursor = Cursors.SizeAll;
+                    }
+                }
             }
 
-
-            if(!(selectedShape is GroupShape))
-            {
-                
-            }
+            //if (isMouseDown)
+            //{
+            //    shapeList[shapeList.Count - 1].endPoint = e.Location;
+            //    this.mainPanel.Invalidate();
+            //}
+            //else if(resizePoint != -1)
+            //{
+            //    if (!(selectedShape is GroupShape) && !(selectedShape is MPen))
+            //    {
+            //        selectedShape.moveControlPoint(e.Location, currentPoint, resizePoint);
+            //        currentPoint = e.Location;
+            //    }   
+            //}
+            
 
             if (isMoving && graphicType == GraphicType.Select)
             {
@@ -392,8 +435,15 @@ namespace midtermProject_Paint
                     this.mainPanel.Refresh();
                 
             }
+            if (graphicType == GraphicType.Pen && isPen)
+            {
 
-            
+                MPen pen = shapeList[shapeList.Count - 1] as MPen;
+                pen.points.Add(e.Location);
+                this.mainPanel.Refresh();
+
+            }
+
         }
        
             
@@ -405,6 +455,11 @@ namespace midtermProject_Paint
                 isCtrlPressed = false;
             }
 
+            if(resizePoint != -1)
+            {
+                resizePoint = -1;
+                selectedShape = null;
+            }
             if (isMoving)
             {
                 deleteShape = selectedShape;
@@ -412,7 +467,11 @@ namespace midtermProject_Paint
                 selectedShape = null;
                 isMoving = false;
             }
-           
+            if(graphicType == GraphicType.Pen)
+            {
+                isMouseDown = false;
+                isPen = false;
+            }
             if (graphicType != GraphicType.Polygon)
                 isMouseDown = false;
                 
@@ -495,8 +554,10 @@ namespace midtermProject_Paint
         {
             isDash = false;
             isFill = false;
+            graphicType = GraphicType.Pen;
         }
 
+    
         private void dashBtn_Click(object sender, EventArgs e)
         {
             if (!isDash) { isDash = true; isFill = false; } else isDash = false;
@@ -541,6 +602,13 @@ namespace midtermProject_Paint
 
         }
 
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            shapeList.Clear();
+            this.mainPanel.Invalidate();
+        }
+
+
         private void eraseBtn_Click(object sender, EventArgs e)
         {
             graphicType = GraphicType.Select;
@@ -565,9 +633,6 @@ namespace midtermProject_Paint
             shapeList.Add(shape);
         }
         
-        public void setCursor(Cursor cursor)
-        {
-            mainPanel.Cursor = Cursor;
-        }
+        
     }
 }
