@@ -234,6 +234,7 @@ namespace midtermProject_Paint
                     {
                         if (!(shapeList[i] is MPen))
                             resizePoint = shapeList[i].SelectControlPoint(e.Location);
+                        Console.WriteLine(resizePoint);
                         if (resizePoint != -1)
                         {
                             shapeList[i].changePoint(resizePoint);
@@ -393,20 +394,14 @@ namespace midtermProject_Paint
                 }
             }
 
-            //if (isMouseDown)
-            //{
-            //    shapeList[shapeList.Count - 1].endPoint = e.Location;
-            //    this.mainPanel.Invalidate();
-            //}
-            //else if(resizePoint != -1)
-            //{
-            //    if (!(selectedShape is GroupShape) && !(selectedShape is MPen))
-            //    {
-            //        selectedShape.moveControlPoint(e.Location, currentPoint, resizePoint);
-            //        currentPoint = e.Location;
-            //    }   
-            //}
-            
+
+            if (isMouseDown && resizePoint != -1)
+            {
+                shapeList[shapeList.Count - 1].endPoint = e.Location;
+                this.mainPanel.Invalidate();
+            }
+        
+
 
             if (isMoving && graphicType == GraphicType.Select)
             {

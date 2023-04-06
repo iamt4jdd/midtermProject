@@ -122,13 +122,7 @@ namespace midtermProject_Paint.models
             return -1;
         }
 
-        public override void moveControlPoint(Point pointCurrent, Point previous, int index)
-        {
-            int deltaX = pointCurrent.X - previous.X;
-            int deltaY = pointCurrent.Y - previous.Y;
-            points[index] = new Point(points[index].X + deltaX, points[index].Y + deltaY);
-        }
-
+       
         protected override GraphicsPath graphicsPath
         {
             get

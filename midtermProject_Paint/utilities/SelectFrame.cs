@@ -101,13 +101,6 @@ namespace midtermProject_Paint.models {
             graphics.DrawRectangle(framePen, selectZone);
         }
 
-        public static void DrawSelectedFrameCircle(Graphics graphics, Pen framePen, Rectangle circleRect)
-        {
-            int diameter = Math.Min(circleRect.Width, circleRect.Height);
-            int x = circleRect.X + (circleRect.Width - diameter) / 2;
-            int y = circleRect.Y + (circleRect.Height - diameter) / 2;
-            Rectangle rect = new Rectangle(x, y, diameter, diameter);
-            graphics.DrawRectangle(framePen, rect);
-        }
+       
     }
 }
