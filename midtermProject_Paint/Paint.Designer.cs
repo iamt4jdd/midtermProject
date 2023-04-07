@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Paint));
             this.toolPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cbDashStyle = new System.Windows.Forms.ComboBox();
+            this.cbBrushStyle = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.clearBtn = new System.Windows.Forms.Button();
             this.currentColorBtn = new System.Windows.Forms.Button();
@@ -57,6 +60,7 @@
             this.eraseBtn = new System.Windows.Forms.Button();
             this.unGroupBtn = new System.Windows.Forms.Button();
             this.groupBtn = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -71,6 +75,9 @@
             // toolPanel
             // 
             this.toolPanel.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.toolPanel.Controls.Add(this.label7);
+            this.toolPanel.Controls.Add(this.cbDashStyle);
+            this.toolPanel.Controls.Add(this.cbBrushStyle);
             this.toolPanel.Controls.Add(this.label6);
             this.toolPanel.Controls.Add(this.clearBtn);
             this.toolPanel.Controls.Add(this.currentColorBtn);
@@ -81,18 +88,64 @@
             this.toolPanel.Controls.Add(this.label1);
             this.toolPanel.Controls.Add(this.panel4);
             this.toolPanel.Controls.Add(this.panel3);
+            this.toolPanel.Controls.Add(this.label8);
             this.toolPanel.Location = new System.Drawing.Point(1, -4);
             this.toolPanel.Name = "toolPanel";
-            this.toolPanel.Size = new System.Drawing.Size(1458, 171);
+            this.toolPanel.Size = new System.Drawing.Size(1658, 171);
             this.toolPanel.TabIndex = 0;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe Print", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label7.Location = new System.Drawing.Point(1336, 6);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(130, 35);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Brush Style";
+            // 
+            // cbDashStyle
+            // 
+            this.cbDashStyle.FormattingEnabled = true;
+            this.cbDashStyle.Items.AddRange(new object[] {
+            "Dash",
+            "Dot",
+            "Dash Dot",
+            "Dash Dot Dot",
+            "Solid"});
+            this.cbDashStyle.Location = new System.Drawing.Point(1379, 109);
+            this.cbDashStyle.Name = "cbDashStyle";
+            this.cbDashStyle.Size = new System.Drawing.Size(143, 28);
+            this.cbDashStyle.TabIndex = 15;
+            this.cbDashStyle.Text = "Dash";
+            // 
+            // cbBrushStyle
+            // 
+            this.cbBrushStyle.FormattingEnabled = true;
+            this.cbBrushStyle.Items.AddRange(new object[] {
+            "Horizontal",
+            "Backward Diagonal",
+            "Cross",
+            "Dark Downward Diagonal",
+            "Dotted Grid",
+            "Horizontal Brick",
+            "Solid Diamond",
+            "Sphere",
+            "Wave",
+            "ZigZag"});
+            this.cbBrushStyle.Location = new System.Drawing.Point(1379, 41);
+            this.cbBrushStyle.Name = "cbBrushStyle";
+            this.cbBrushStyle.Size = new System.Drawing.Size(143, 28);
+            this.cbBrushStyle.TabIndex = 14;
+            this.cbBrushStyle.Text = "Horizontal";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Viner Hand ITC", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(1357, 120);
+            this.label6.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label6.Location = new System.Drawing.Point(1567, 116);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(71, 32);
+            this.label6.Size = new System.Drawing.Size(67, 35);
             this.label6.TabIndex = 13;
             this.label6.Text = "Clear";
             // 
@@ -101,7 +154,7 @@
             this.clearBtn.BackColor = System.Drawing.Color.White;
             this.clearBtn.BackgroundImage = global::midtermProject_Paint.Properties.Resources.clear1;
             this.clearBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.clearBtn.Location = new System.Drawing.Point(1357, 42);
+            this.clearBtn.Location = new System.Drawing.Point(1568, 42);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(62, 52);
             this.clearBtn.TabIndex = 9;
@@ -112,7 +165,7 @@
             // currentColorBtn
             // 
             this.currentColorBtn.BackColor = System.Drawing.SystemColors.ControlText;
-            this.currentColorBtn.Location = new System.Drawing.Point(863, 59);
+            this.currentColorBtn.Location = new System.Drawing.Point(858, 55);
             this.currentColorBtn.Name = "currentColorBtn";
             this.currentColorBtn.Size = new System.Drawing.Size(69, 62);
             this.currentColorBtn.TabIndex = 0;
@@ -121,7 +174,7 @@
             // 
             // btnWidth
             // 
-            this.btnWidth.Location = new System.Drawing.Point(1168, 56);
+            this.btnWidth.Location = new System.Drawing.Point(1165, 56);
             this.btnWidth.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -133,7 +186,7 @@
             0,
             0});
             this.btnWidth.Name = "btnWidth";
-            this.btnWidth.Size = new System.Drawing.Size(150, 27);
+            this.btnWidth.Size = new System.Drawing.Size(139, 27);
             this.btnWidth.TabIndex = 12;
             this.btnWidth.Value = new decimal(new int[] {
             3,
@@ -145,10 +198,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Viner Hand ITC", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(1162, 120);
+            this.label2.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.Location = new System.Drawing.Point(1156, 119);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(158, 32);
+            this.label2.Size = new System.Drawing.Size(153, 35);
             this.label2.TabIndex = 11;
             this.label2.Text = "Change width";
             // 
@@ -166,10 +219,10 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Viner Hand ITC", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(54, 130);
+            this.label5.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label5.Location = new System.Drawing.Point(54, 126);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 32);
+            this.label5.Size = new System.Drawing.Size(73, 35);
             this.label5.TabIndex = 9;
             this.label5.Text = "Styles";
             // 
@@ -217,7 +270,7 @@
             this.colordiaBtn.BackColor = System.Drawing.Color.Transparent;
             this.colordiaBtn.BackgroundImage = global::midtermProject_Paint.Properties.Resources.pallet;
             this.colordiaBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.colordiaBtn.Location = new System.Drawing.Point(1021, 39);
+            this.colordiaBtn.Location = new System.Drawing.Point(1003, 32);
             this.colordiaBtn.Name = "colordiaBtn";
             this.colordiaBtn.Size = new System.Drawing.Size(68, 62);
             this.colordiaBtn.TabIndex = 8;
@@ -227,10 +280,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Viner Hand ITC", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(962, 120);
+            this.label1.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(949, 121);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(180, 32);
+            this.label1.Size = new System.Drawing.Size(181, 35);
             this.label1.TabIndex = 7;
             this.label1.Text = "Customise Colors";
             // 
@@ -251,10 +304,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Viner Hand ITC", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(126, 130);
+            this.label3.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label3.Location = new System.Drawing.Point(126, 126);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 32);
+            this.label3.Size = new System.Drawing.Size(83, 35);
             this.label3.TabIndex = 7;
             this.label3.Text = "Shapes";
             // 
@@ -410,11 +463,21 @@
             this.groupBtn.UseVisualStyleBackColor = false;
             this.groupBtn.Click += new System.EventHandler(this.groupBtn_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe Print", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label8.Location = new System.Drawing.Point(1340, 74);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(121, 35);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Dash Style";
+            // 
             // mainPanel
             // 
             this.mainPanel.Location = new System.Drawing.Point(12, 173);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(1447, 793);
+            this.mainPanel.Size = new System.Drawing.Size(1631, 793);
             this.mainPanel.TabIndex = 1;
             this.mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
             this.mainPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseClick);
@@ -426,7 +489,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1471, 978);
+            this.ClientSize = new System.Drawing.Size(1655, 978);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.toolPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -479,5 +542,9 @@
         private Label label4;
         private Label label6;
         private Button clearBtn;
+        private ComboBox cbDashStyle;
+        private ComboBox cbBrushStyle;
+        private Label label8;
+        private Label label7;
     }
 }

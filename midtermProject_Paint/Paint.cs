@@ -24,6 +24,8 @@ namespace midtermProject_Paint
         List<Shape> shapeList = new List<Shape>();
         List<Shape> selectedShapeList = new List<Shape>();
         Color color;
+        HatchStyle brushStyle;
+        DashStyle dashStyle;
         int width;
         bool isMouseDown;
         bool isFill, isDash, isPen, isPolygon, isMoving = false, isCtrlPressed = false;
@@ -53,6 +55,7 @@ namespace midtermProject_Paint
             color = Color.Black;
             width = 3;
             myPen = new Pen(color, width);
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -192,6 +195,9 @@ namespace midtermProject_Paint
 
         private void mainPanel_MouseDown(object sender, MouseEventArgs e)
         {
+            ChangeBrushStyle();
+            ChangeDashStyle();
+   
             if (Control.ModifierKeys == Keys.Control)
             {
                 isCtrlPressed = true;
@@ -234,7 +240,7 @@ namespace midtermProject_Paint
                     {
                         if (!(shapeList[i] is MPen))
                             resizePoint = shapeList[i].SelectControlPoint(e.Location);
-                        Console.WriteLine(resizePoint);
+                        
                         if (resizePoint != -1)
                         {
                             shapeList[i].changePoint(resizePoint);
@@ -282,7 +288,7 @@ namespace midtermProject_Paint
                         endPoint = e.Location,
                         width = width,
                         color = color,
-                        isDash = isDash,
+                        
                     });
                     isPen = true;
                     break;
@@ -293,7 +299,8 @@ namespace midtermProject_Paint
                         endPoint = e.Location,
                         width = width,
                         color = color,
-                        isDash = isDash
+                        isDash = isDash,
+                        dashStyle = dashStyle,
                     });
                     break;
                 case GraphicType.Rectangle:
@@ -304,7 +311,9 @@ namespace midtermProject_Paint
                         width = width,
                         color = color,
                         isFill = isFill,
-                        isDash = isDash
+                        isDash = isDash,
+                        brushStyle = brushStyle,
+                        dashStyle = dashStyle,
                     });
                     break;
                 case GraphicType.Ellipse:
@@ -315,7 +324,9 @@ namespace midtermProject_Paint
                         width = width,
                         color = color,
                         isFill = isFill,
-                        isDash = isDash
+                        isDash = isDash,
+                        brushStyle = brushStyle,
+                        dashStyle = dashStyle,
                     });
                     break;
                 case GraphicType.Circle:
@@ -326,7 +337,9 @@ namespace midtermProject_Paint
                         width = width,
                         color = color,
                         isFill = isFill,
-                        isDash = isDash
+                        isDash = isDash,
+                        brushStyle = brushStyle,
+                        dashStyle = dashStyle,
                     });
                     break;
                 case GraphicType.Arc:
@@ -337,7 +350,9 @@ namespace midtermProject_Paint
                         width = width,
                         color = color,
                         isFill = isFill,
-                        isDash = isDash
+                        isDash = isDash,
+                        brushStyle = brushStyle,
+                        dashStyle = dashStyle,
                     });
                     break;
                 case GraphicType.Polygon:
@@ -350,7 +365,9 @@ namespace midtermProject_Paint
                             width = width,
                             color = color,
                             isFill = isFill,
-                            isDash = isDash
+                            isDash = isDash,
+                            brushStyle = brushStyle,
+                            dashStyle = dashStyle,
                         };
                         polygon.points.Add(e.Location);
                         polygon.points.Add(e.Location);
@@ -393,11 +410,11 @@ namespace midtermProject_Paint
                     }
                 }
             }
+          
 
-
-            if (isMouseDown && resizePoint != -1)
+            if (isMouseDown && resizePoint != -1 && selectedShape != null)
             {
-                shapeList[shapeList.Count - 1].endPoint = e.Location;
+                selectedShape.endPoint = e.Location;
                 this.mainPanel.Invalidate();
             }
         
@@ -547,12 +564,12 @@ namespace midtermProject_Paint
 
         private void penBtn_Click(object sender, EventArgs e)
         {
-            isDash = false;
             isFill = false;
             graphicType = GraphicType.Pen;
         }
 
-    
+       
+
         private void dashBtn_Click(object sender, EventArgs e)
         {
             if (!isDash) { isDash = true; isFill = false; } else isDash = false;
@@ -576,7 +593,7 @@ namespace midtermProject_Paint
                 deleteShape = group;
                 selectedShapeList.Clear();
                 this.mainPanel.Invalidate();
-                Console.WriteLine(selectedShapeList.Count());
+              
             }
             
 
@@ -627,7 +644,81 @@ namespace midtermProject_Paint
         {
             shapeList.Add(shape);
         }
-        
-        
+        private void ChangeBrushStyle()
+        {
+            if (isFill)
+            {
+
+                if (cbBrushStyle.SelectedItem.ToString() == "Horizontal")
+                {
+                    brushStyle = HatchStyle.Horizontal;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Backward Diagonal")
+                {
+                    brushStyle = HatchStyle.BackwardDiagonal;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Cross")
+                {
+                    brushStyle = HatchStyle.Cross;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Dark Downward Diagonal")
+                {
+                    brushStyle = HatchStyle.DarkDownwardDiagonal;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Dotted Grid")
+                {
+                    brushStyle = HatchStyle.DottedGrid;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Horizontal Brick")
+                {
+                    brushStyle = HatchStyle.HorizontalBrick;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Solid Diamond")
+                {
+                    brushStyle = HatchStyle.SolidDiamond;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Sphere")
+                {
+                    brushStyle = HatchStyle.Sphere;
+                }
+                else if (cbBrushStyle.SelectedItem.ToString() == "Wave")
+                {
+                    brushStyle = HatchStyle.Wave;
+                }
+                else
+                {
+                    brushStyle = HatchStyle.ZigZag;
+                }
+            }
+            
+        }
+
+        private void ChangeDashStyle()
+        {
+            if (isDash)
+            {
+
+                if (cbDashStyle.SelectedItem.ToString() == "Dash")
+                {
+                    dashStyle = DashStyle.Dash;
+                }
+                else if (cbDashStyle.SelectedItem.ToString() == "Dot")
+                {
+                    dashStyle = DashStyle.Dot;
+                }
+                else if (cbDashStyle.SelectedItem.ToString() == "Dash Dot")
+                {
+                    dashStyle = DashStyle.DashDot;
+                }
+                else if (cbDashStyle.SelectedItem.ToString() == "Dash Dot Dot")
+                {
+                    dashStyle = DashStyle.DashDotDot;
+                }
+                else dashStyle = DashStyle.Solid;
+               
+            }
+
+        }
+
     }
 }

@@ -28,7 +28,8 @@ namespace midtermProject_Paint.models
            {
                 using (Pen myPen = new Pen(color, width))
                 {
-                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                   
+                    if (isDash) myPen.DashStyle = dashStyle;
                     graphic.DrawRectangle(myPen, Math.Min(this.startPoint.X, this.endPoint.X),
                     Math.Min(this.startPoint.Y, this.endPoint.Y),
                     Math.Abs(this.endPoint.X - this.startPoint.X),
@@ -37,8 +38,9 @@ namespace midtermProject_Paint.models
             }
            else
            {
-                using (Brush myBrush = new SolidBrush(color))
+                using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
                 {
+                    
                     graphic.FillRectangle(myBrush, Math.Min(this.startPoint.X, this.endPoint.X),
                     Math.Min(this.startPoint.Y, this.endPoint.Y),
                     Math.Abs(this.endPoint.X - this.startPoint.X),

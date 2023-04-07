@@ -30,14 +30,14 @@ namespace midtermProject_Paint.models
             {
                 using (Pen myPen = new Pen(this.color, this.width))
                 {
-                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    if (isDash) myPen.DashStyle = dashStyle;
                     graphic.DrawPath(myPen, path);
                 }
                 if (this.isFill)
                 {
-                    using (Brush brush = new SolidBrush(this.color))
+                    using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
                     {
-                        graphic.FillPath(brush, path);
+                        graphic.FillPath(myBrush, path);
                     }
                 }
             }

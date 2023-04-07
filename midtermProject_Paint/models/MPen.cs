@@ -42,6 +42,7 @@ namespace midtermProject_Paint.models
         {
             Pen myPen = new Pen(color, width);
             myPen.StartCap = myPen.EndCap = LineCap.Round;
+            if (isDash) myPen.DashStyle = dashStyle;
             graphic.DrawPath(myPen, graphicsPath);
         }
         public override bool isSelect(Point point)

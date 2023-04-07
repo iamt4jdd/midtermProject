@@ -32,7 +32,7 @@ namespace midtermProject_Paint.models
             {
                 using (Pen myPen = new Pen(color, width))
                 {
-                    if (isDash) myPen.DashStyle = DashStyle.Dash;
+                    if (isDash) myPen.DashStyle = dashStyle;
                     graphic.DrawPath(myPen, path);
                 }
             }

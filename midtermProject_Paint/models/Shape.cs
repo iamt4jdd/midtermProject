@@ -31,6 +31,10 @@ namespace midtermProject_Paint.models
 
         public Color color { get; set; }
 
+        public HatchStyle brushStyle { get; set; }
+
+        public DashStyle dashStyle { get; set; }
+
         public int width { get; set; }
 
         public abstract void drawShape(Graphics graphic);
