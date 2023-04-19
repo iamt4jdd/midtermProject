@@ -49,42 +49,42 @@ namespace midtermProject_Paint.models {
            
         }
 
-        //public static void DrawSelectPointsArc(Graphics graphics, Brush brush, Point startPoint, Point endPoint)
-        //{
-        //    int radius = Math.Abs(startPoint.Y - endPoint.Y) / 2;
-        //    int centerX = Math.Min(startPoint.X, endPoint.X) + radius;
-        //    int centerY = Math.Min(startPoint.Y, endPoint.Y) + radius;
+        public static void DrawSelectPointsArc(Graphics graphics, Brush brush, Point startPoint, Point endPoint)
+        {
+            int radius = Math.Abs(startPoint.Y - endPoint.Y) / 2;
+            int centerX = Math.Min(startPoint.X, endPoint.X) + radius;
+            int centerY = Math.Min(startPoint.Y, endPoint.Y) + radius;
 
-        //    // Calculate the start and end points of the arc
-        //    double startAngle = Math.Atan2(startPoint.Y - centerY, startPoint.X - centerX);
-        //    double endAngle = Math.Atan2(endPoint.Y - centerY, endPoint.X - centerX);
+            // Calculate the start and end points of the arc
+            double startAngle = Math.Atan2(startPoint.Y - centerY, startPoint.X - centerX);
+            double endAngle = Math.Atan2(endPoint.Y - centerY, endPoint.X - centerX);
 
-        //    // Convert the angles from radians to degrees
-        //    startAngle = startAngle * (180 / Math.PI);
-        //    endAngle = endAngle * (180 / Math.PI);
+            // Convert the angles from radians to degrees
+            startAngle = startAngle * (180 / Math.PI);
+            endAngle = endAngle * (180 / Math.PI);
 
-        //    // Ensure that the start angle is always less than the end angle
-        //    if (startAngle > endAngle)
-        //    {
-        //        double temp = startAngle;
-        //        startAngle = endAngle;
-        //        endAngle = temp;
-        //    }
-           
-        //    // Calculate the coordinates of the start and end points
-        //    Point start = new Point((int)(centerX + radius * Math.Cos(startAngle)),
-        //                            (int)(centerY + radius * Math.Sin(startAngle)));
-        //    Point end = new Point((int)(centerX + radius * Math.Cos(endAngle)),
-        //                          (int)(centerY + radius * Math.Sin(endAngle * Math.PI/1080)));
-        //    end.X = endPoint.X;
-      
-        //    // Draw the select points at the start and end points of the arc
-        //    graphics.FillRectangle(brush, new Rectangle(start.X - 5, start.Y + 10, 10, 10));
-        //    graphics.FillRectangle(brush, new Rectangle(end.X - 5, end.Y - 10, 10, 10));
+            // Ensure that the start angle is always less than the end angle
+            if (startAngle > endAngle)
+            {
+                double temp = startAngle;
+                startAngle = endAngle;
+                endAngle = temp;
+            }
 
-        //}
+            // Calculate the coordinates of the start and end points
+            Point start = new Point((int)(centerX + radius * Math.Cos(startAngle)),
+                                    (int)(centerY + radius * Math.Sin(startAngle)));
+            Point end = new Point((int)(centerX + radius * Math.Cos(endAngle)),
+                                  (int)(centerY + radius * Math.Sin(endAngle * Math.PI / 1080)));
+            end.X = endPoint.X;
 
-       
+            // Draw the select points at the start and end points of the arc
+            graphics.FillRectangle(brush, new Rectangle(start.X - 5, start.Y + 10, 10, 10));
+            graphics.FillRectangle(brush, new Rectangle(end.X - 5, end.Y - 10, 10, 10));
+
+        }
+
+
 
         public static void DrawSelectPointsPolygon(Graphics graphics, Brush brush, List<Point> points)
         {

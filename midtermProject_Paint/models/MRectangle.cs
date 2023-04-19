@@ -24,29 +24,25 @@ namespace midtermProject_Paint.models
 
         public override void drawShape(Graphics graphic)
         {
-           if(!isFill)
-           {
-                using (Pen myPen = new Pen(color, width))
+            using (GraphicsPath path = graphicsPath)
+            {
+                if (!isFill)
                 {
-                   
-                    if (isDash) myPen.DashStyle = dashStyle;
-                    graphic.DrawRectangle(myPen, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.X - this.startPoint.X),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
+                    using (Pen myPen = new Pen(color, width))
+                    {
+                        if (isDash) myPen.DashStyle = dashStyle;
+                        graphic.DrawPath(myPen, path);
+                    }
+                }
+                else
+                {
+                    using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
+                    {
+                        graphic.FillPath(myBrush, path);
+                    }
                 }
             }
-           else
-           {
-                using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
-                {
-                    
-                    graphic.FillRectangle(myBrush, Math.Min(this.startPoint.X, this.endPoint.X),
-                    Math.Min(this.startPoint.Y, this.endPoint.Y),
-                    Math.Abs(this.endPoint.X - this.startPoint.X),
-                    Math.Abs(this.endPoint.Y - this.startPoint.Y));
-                }
-            }
+
         }
         public override bool isSelect(Point point)
         {

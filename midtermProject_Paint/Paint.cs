@@ -134,9 +134,9 @@ namespace midtermProject_Paint
                         }
                         else if (selectedShape is MArc)
                         {
-                            //SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
-                            //                             selectedShape.startPoint,
-                            //                             selectedShape.endPoint);
+                            SelectFrame.DrawSelectPointsArc(e.Graphics, MovingBrush,
+                                                         selectedShape.startPoint,
+                                                         selectedShape.endPoint);
                         }
                         else 
                         {
