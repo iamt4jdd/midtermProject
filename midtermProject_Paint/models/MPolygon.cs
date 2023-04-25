@@ -24,40 +24,40 @@ namespace midtermProject_Paint.models
             this.color = color;
         }
 
-        public override void drawShape(Graphics graphic)
-        {
-           
-            using(GraphicsPath path = this.graphicsPath)
+            public override void drawShape(Graphics graphic)
             {
-                if (!this.isFill)
+           
+                using(GraphicsPath path = this.graphicsPath)
                 {
-                    using (Pen myPen = new Pen(color, width))
+                    if (!this.isFill)
                     {
-                        if (isDash) myPen.DashStyle = dashStyle;
-                        graphic.DrawPath(myPen, path);
-                
-                    }
-                }
-                else
-                {
-                    using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
-                    {
-                        if (points.Count < 3)
+                        using (Pen myPen = new Pen(color, width))
                         {
-                            using (Pen myPen = new Pen(color, width))
+                            if (isDash) myPen.DashStyle = dashStyle;
+                            graphic.DrawPath(myPen, path);
+                
+                        }
+                    }
+                    else
+                    {
+                        using (HatchBrush myBrush = new HatchBrush(brushStyle, color))
+                        {
+                            if (points.Count < 3)
                             {
-                                graphic.DrawPath(myPen, path);
+                                using (Pen myPen = new Pen(color, width))
+                                {
+                                    graphic.DrawPath(myPen, path);
+                                }
+                            }
+                            else
+                            {
+                                graphic.FillPath(myBrush, path);
                             }
                         }
-                        else
-                        {
-                            graphic.FillPath(myBrush, path);
-                        }
                     }
                 }
-            }
             
-        }
+            }
 
         public override bool isSelect(Point point)
         {
@@ -121,8 +121,14 @@ namespace midtermProject_Paint.models
             }
             return -1;
         }
+        public override void moveControlPoint(Point pointCurrent, Point previous, int index)
+        {
+            int deltaX = pointCurrent.X - previous.X;
+            int deltaY = pointCurrent.Y - previous.Y;
+            points[index] = new Point(points[index].X + deltaX, points[index].Y + deltaY);
 
-       
+        }
+
         protected override GraphicsPath graphicsPath
         {
             get

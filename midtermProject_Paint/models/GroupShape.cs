@@ -79,10 +79,7 @@ namespace midtermProject_Paint.models
                               Math.Abs(endPoint.X - startPoint.X),
                               Math.Abs(endPoint.Y - startPoint.Y));
                             path.AddArc(rect, startAngle, sweepAngle);
-                        }
-
-
-                      
+                        }      
                     }
                     else if (shapes[i] is MEllipse)
                     {
@@ -123,14 +120,8 @@ namespace midtermProject_Paint.models
                     }
                     paths[i] = path;
                 }
-
                 return paths;
             }
-        }
-
-        public void addShape(Shape shape)
-        {
-            shapes.Add(shape);
         }
 
         public override void drawShape(Graphics graphic)
@@ -151,7 +142,6 @@ namespace midtermProject_Paint.models
                         }
                         else
                         {
-
                             using (Pen myPen = new Pen(shapes[i].color, shapes[i].width))
                             {
                                 graphic.DrawPath(myPen, path);
@@ -163,7 +153,6 @@ namespace midtermProject_Paint.models
                         GroupShape group = (GroupShape)shapes[i];
                         group.drawShape(graphic);
                     }
-                   
                     else
                     {
                         using (Pen myPen = new Pen(shapes[i].color, shapes[i].width))
@@ -177,7 +166,6 @@ namespace midtermProject_Paint.models
 
         public override bool isSelect(Point point)
         {
-          
             GraphicsPath[] paths = graphicsPaths;
             for (int i = 0; i < paths.Length; i++)
             {
@@ -223,7 +211,6 @@ namespace midtermProject_Paint.models
                     }
                 }
             }
-
             return false;
         }
 
@@ -231,9 +218,7 @@ namespace midtermProject_Paint.models
         {
             for (int i = 0; i < shapes.Count; i++)
             {
-                
-                    shapes[i].moveShape(distance);
-                
+                    shapes[i].moveShape(distance);             
             }
             startPoint = new Point(startPoint.X + distance.X, startPoint.Y + distance.Y);
             endPoint = new Point(endPoint.X + distance.X, endPoint.Y + distance.Y);
@@ -262,7 +247,6 @@ namespace midtermProject_Paint.models
                 {
                     minX = shape.endPoint.X;
                 }
-
                 if (shape.startPoint.Y < minY)
                 {
                     minY = shape.startPoint.Y;
@@ -271,7 +255,6 @@ namespace midtermProject_Paint.models
                 {
                     minY = shape.endPoint.Y;
                 }
-
                 if (shape.startPoint.X > maxX)
                 {
                     maxX = shape.startPoint.X;
@@ -280,7 +263,6 @@ namespace midtermProject_Paint.models
                 {
                     maxX = shape.endPoint.X;
                 }
-
                 if (shape.startPoint.Y > maxY)
                 {
                     maxY = shape.startPoint.Y;
@@ -290,9 +272,13 @@ namespace midtermProject_Paint.models
                     maxY = shape.endPoint.Y;
                 }
             }
-
             this.startPoint = new Point(minX, minY);
             this.endPoint = new Point(maxX, maxY);
+        }
+
+        public void addShape(Shape shape)
+        {
+            shapes.Add(shape);
         }
         public void UnGroup(List<Shape> Shapes)
         {

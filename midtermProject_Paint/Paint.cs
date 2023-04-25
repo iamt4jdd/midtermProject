@@ -17,8 +17,7 @@ namespace midtermProject_Paint
 {
     public partial class Paint : Form
     {
-        //private IDrawGraphic DrawGraphic;
-        //Graphics graphic;
+     
         Pen myPen;
         GraphicType graphicType;
         List<Shape> shapeList = new List<Shape>();
@@ -38,7 +37,6 @@ namespace midtermProject_Paint
         {
             DashPattern = new float[] { 3, 3, 3, 3 },
         };
-      
 
         public Paint()
         {
@@ -49,9 +47,7 @@ namespace midtermProject_Paint
 
         private void initComponents()
         {
-            //DrawGraphic = new DrawGraphic();
             mainPanel.SetDoubleBuffered();
-            //graphic = this.mainPanel.CreateGraphics();
             color = Color.Black;
             width = 3;
             myPen = new Pen(color, width);
@@ -144,7 +140,7 @@ namespace midtermProject_Paint
                                                          selectedShape.startPoint,
                                                          selectedShape.endPoint);
                         }
-                        if (!(selectedShape is MLine) && !(selectedShape is MArc) && !(selectedShape is MPen))
+                        if (!(selectedShape is MLine) && !(selectedShape is MArc) && !(selectedShape is MPen) && !(selectedShape is MPolygon))
                         {                    
                             if (selectedShape.startPoint.X < selectedShape.endPoint.X 
                             && selectedShape.startPoint.Y < selectedShape.endPoint.Y)

@@ -11,12 +11,10 @@ namespace midtermProject_Paint.models
 {
     public class MArc : Shape
     {
-      
-
+    
         public MArc()
         {
             name = "Arc";
-          
         }
 
         public MArc(Color color)

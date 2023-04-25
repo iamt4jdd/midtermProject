@@ -19,8 +19,6 @@ namespace midtermProject_Paint.models
 
         public Point endPoint { get; set; }
 
-        public Point previousLocation { get; set; }
-
         public bool isSelected { get; set; }
 
         public bool isInside { get; set; }
@@ -72,7 +70,6 @@ namespace midtermProject_Paint.models
             return -1;
 
         }
-
         public virtual void changePoint(int index)
         {
           
@@ -92,7 +89,23 @@ namespace midtermProject_Paint.models
             }
         }
 
-      
+        public virtual void moveControlPoint(Point pointCurrent, Point previous, int index)
+        {
+            int deltaX = pointCurrent.X - previous.X;
+            int deltaY = pointCurrent.Y - previous.Y;
+            if (index == 1 || index == 6)
+            {
+                endPoint = new Point(endPoint.X, endPoint.Y + deltaY);
+            }
+            else if (index == 3 || index == 4)
+            {
+                endPoint = new Point(endPoint.X + deltaX, endPoint.Y);
+            }
+            else
+            {
+                endPoint = pointCurrent;
+            }
+        }
 
         protected abstract GraphicsPath graphicsPath { get; }
         
